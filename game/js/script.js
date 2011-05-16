@@ -1,13 +1,13 @@
 $(function() {
-   loadMap();
-   getQuestions();
+   generateQuestion();
+   //loadMap();
+   
  });
 
 
 
-
+var start;
 var map;
-var directionDisplay;
 var directionsService = new google.maps.DirectionsService();
 var routeStatus;
 var pointsTotal = 0;
@@ -55,9 +55,12 @@ function loadMap() {
 	}
 	];
 	var myOptions = {
-		zoom: 5,
-		center: myLatlng
-		//mapTypeId: google.maps.MapTypeId.HYBRID
+		zoom: 4,
+		center: myLatlng,
+		mapTypeControl: false,
+		navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+		streetViewControl: false,
+		mapTypeId: google.maps.MapTypeId.TERRAIN
 	}
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	directionsDisplay.setMap(map);
@@ -80,7 +83,7 @@ function loadMap() {
 
 function getDistance(clickedLocation) {
 	var entfernung;
-	var start = "Karlsruhe";
+	//var start = "Karlsruhe";
 	var end = clickedLocation;
 	var request = {
 		origin: start, 
@@ -95,12 +98,10 @@ function getDistance(clickedLocation) {
 		var ergebnisArray = [];
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(result);
-			//entfernung = Math.round(result.routes[0].legs[0].distance.value/1000);
-			//entfernung /= 1000;
 			ergebnisArray[0] = Math.round(result.routes[0].legs[0].distance.value/1000);
 			ergebnisArray[1] = result.routes[0].legs[0].duration.text;
-			ergebnisArray[2] = result.routes[0].legs[0].end_address;
-			ergebnisArray[3] = result.routes[0].legs[0].end_location;
+			//ergebnisArray[2] = result.routes[0].legs[0].end_address;
+			//ergebnisArray[3] = result.routes[0].legs[0].end_location;
 			placeMarker(clickedLocation, ergebnisArray);
 			calcPoints(ergebnisArray[0]);
 		}
@@ -147,11 +148,27 @@ function placeMarker(location, ergebnisArray) {
 	map.setCenter(location);
 }
 
-function getQuestions() {
-	$.getJSON("getQuestions.php", function(data){
-	  //console.log(data.coordinates);
-	  var images = "<img class='thumbnail' src='"+ data.img_url1 + "'><img class='thumbnail' src='"+ data.img_url2 + "'><img class='thumbnail' src='"+ data.img_url3 + "'>";
-	  $('#questions').append(images);
+function generateQuestion() {
+	$.getJSON("getLocation.php", function(data){
+	  /**console.log(data.lat);
+	  console.log(data.lng);
+	  console.log(data.locationName);**/
+	  start = data.locationName;
+	  getPictures(data.locationName);
+	  loadMap();
+	});
+	
+}
+
+function getPictures(locationName) {
+  //gets and displays pictures for specified location
+	$.getJSON("getPictures.php", 
+	          {
+	            locName: locationName
+	          },
+	          function(data){
+	            var images = "<img class='thumbnail' src='"+ data.img_url1 + "'><img class='thumbnail' src='"+ data.img_url2 + "'><img class='thumbnail' src='"+ data.img_url3 + "'>";
+	            $('#questions').append(images);
 	});
 }
 
