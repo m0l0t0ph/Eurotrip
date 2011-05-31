@@ -1,21 +1,16 @@
 $(function() {
    generateQuestion();
-   //loadMap();
+   loadMap();
    
  });
 
-
-
-var start;
-var map;
 var directionsService = new google.maps.DirectionsService();
-var routeStatus;
 var pointsTotal = 0;
 var markersArray = [];
 var infowindowsArray = [];
-var directionsDisplay,
-		end_address,
-		end_location;
+var map,
+    start,
+    directionsDisplay;
 
 function loadMap() {
 	var myLatlng = new google.maps.LatLng(48.99643826296838, 8.397674685546917);
@@ -103,6 +98,7 @@ function getDistance(clickedLocation) {
 			//ergebnisArray[2] = result.routes[0].legs[0].end_address;
 			//ergebnisArray[3] = result.routes[0].legs[0].end_location;
 			placeMarker(clickedLocation, ergebnisArray);
+			
 			calcPoints(ergebnisArray[0]);
 		}
 	});
@@ -136,26 +132,40 @@ function placeMarker(location, ergebnisArray) {
 	
 	//var bubbleContent = "Position " + location + "<br>Entfernung: " + Math.round(ergebnisArray[0]) + " km<br>" + ergebnisArray[2]
 	//neue Infoblase
-	var bubbleContent = "<p class=\"infowindow\">Du liegst " + ergebnisArray[0] + "km daneben! <br>Da musst du noch " + ergebnisArray[1] + " fahren!</p>";
+	var bubbleContent = "<article class=\"infowindow\">Die richtig Antwort war " + start + ". <br>" +
+	                    "Du liegst " + ergebnisArray[0] + "km daneben! <br>" +
+	                    "Da musst du noch " + ergebnisArray[1] + " fahren!<br>" +
+	                    "<a id=\"nq\" href=\"#\">Nächste Frage</a></article>";
+	
 	var infowindow = new google.maps.InfoWindow(
 		{ content: bubbleContent,
 		size: new google.maps.Size(50,50),
 		position: location
 	});
 	infowindow.open(map);
+	google.maps.event.addListener(infowindow, 'domready', function() {
+		var nq = $('#nq');
+		nq.css('margin-top', '10px');
+		var infow = $('.infowindow');
+		infow.css('text-align', 'center');
+		nq.click(function() {
+    	    generateQuestion();
+    	});
+	});
 	infowindowsArray.push(infowindow);
 	//Karte auf den geklickten Ort zentrieren
 	map.setCenter(location);
 }
 
 function generateQuestion() {
+	//deleteOverlays();
+	loadMap();
 	$.getJSON("getLocation.php", function(data){
 	  /**console.log(data.lat);
 	  console.log(data.lng);
 	  console.log(data.locationName);**/
 	  start = data.locationName;
 	  getPictures(data.locationName);
-	  loadMap();
 	});
 	
 }
@@ -173,7 +183,7 @@ function getPictures(locationName) {
 }
 
 function calcPoints(entfernung) {
-	pointsTotal += Math.round(entfernung);
+	pointsTotal += Math.round(entfernung)/2;
 	
 	//Hochzählanimation
 	incCounter();
@@ -184,7 +194,7 @@ function incCounter() {
 		var currCount = parseInt(points.html());
     points.text(currCount+7);
     if (currCount+7 <= pointsTotal) {
-        setTimeout('incCounter()',25);
+        setTimeout('incCounter()',15);
     }
 		else {
 			points.text(pointsTotal);

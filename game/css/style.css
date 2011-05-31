@@ -85,18 +85,19 @@ a:hover { color: #036; }
    ||                                              ||
     \\ ========================================== //
 */
-body { width: 960px; border: 2px solid #000000; margin: 0 auto; font-family: Helvetica, sans-serif;}
+body { width: 960px; border: 2px solid #729fcf; margin: 0 auto; font-family: Helvetica, sans-serif;}
 header { height: 50px; padding: 3px; }
 h1 { font-size: 182%; }
 h2 { padding: 4px; font-size: 123.1%; font-weight: normal;}
 
-#map_canvas { float:left; border: 2px solid #000000;	border-left: 0; width: 700px; height: 400px; }
+#map_canvas { float:left; border: 2px solid #729fcf;	border-left: 0; width: 700px; height: 400px; }
 #score { float: left; width: 240px; border: 0px solid red; color: #3465a4; margin-left: 10px; }
 #your_score { font-size: 167%; width: 180px; margin: 0 auto; font-weight: bold; padding: 5px; border: 1px solid #3465a4; border-radius: 7px; text-align: center; box-shadow: inset 0 0 8px #729fcf;}
 #questions { clear: both; width: 690px; border: 1px solid green; color: #3465a4; padding: 5px;}
 .thumbnail { width: 200px; height: 150px; border-radius: 7px; margin-left: 10px; margin-right: 10px; }
 .infowindow { font-weight: bold;}
-footer { background-color: #000000; padding: 3px; font-size: 77%; text-align: right;}
+footer { background-color: #729fcf; padding: 3px; font-size: 77%; text-align: right;}
+
 
 
 
