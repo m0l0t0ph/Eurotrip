@@ -1,37 +1,39 @@
-<?php 
+﻿<?php 
+$result = array();
+$result2 = array();
+$location_name = "Ort";
+$coordinates = "Koordinaten";
 
-// Bounding Box Coordinates for Europe
-$north  =    "81.008797";
-$south  =    "27.636311";
-$east   =    "39.869301";
-$west   =    "-31.266001";
+	if (isset($_GET['location'])){
+		$location = $_GET['location'];
+	}
+	else {
+		$location = 'Berlin';
+	}
+	
+	if (isset($_GET['limit'])){
+		$limit = $_GET['limit'];
+	}
+	else {
+		$limit = 10;
+	}	
 
-$minPopulation = 200000;
+$url = "http://api.freebase.com/api/service/mqlread?query={\"query\":{\"/common/topic/image\":{\"id\":null,\"limit\":1,\"optional\":true},\"id\":null,\"type\":\"/travel/tourist_attraction\",\"name\":null,\"limit\":".$limit.",\"u0:near_travel_destination\":[{\"id\":null,\"name~=\":\"*".$location."*\",\"type\":\"/travel/travel_destination\"}]}}";	
 
-$webservice =  'http://api.geonames.org/citiesJSON?north='.$north.'&south='.$south.'&east='.$east.'&west='.$west.'&lang=de&username=klaemo';
- 
-		// WebService aufrufen
-		$json = file_get_contents($webservice);
- 
-		// HTTP Status auslesen
-		if(isset($http_response_header[0]))
-			list($version,$status_code,$msg) = explode(' ',$http_response_header[0], 3);
- 
-		// HTTP Status ueberpruefen
-		if($status_code != 200) {
-			die('Ungueltiger Aufruf des Web Services.');
-		}
- 
-		$cities = json_decode($json);
-		$array = $cities->geonames;
-		$result = array();
-		foreach ($array as $value) {
-            if($value->population > $minPopulation) {
-                $result[] = $value->name;
-            }
-            
-        }
-$ran = rand(0, count($result));
-$location["locationName"] = $result[$ran];		
-echo json_encode($location);
+$contents = file_get_contents($url); 
+$contents = utf8_encode($contents); 
+$result = json_decode($contents, true); 	
+
+for ($i = 0; $i <= 9; $i++) {
+	$s=$result['messages']['0']['info']['result'][$i]['name'];
+	if($s!=null){
+		$result2['locations'][$i] = ($s);
+	}
+	if($s==null){
+		break;
+	}
+}
+$result['anzahl']="lalelu";
+//var_dump($result2);
+echo json_encode($result2);	
 ?>

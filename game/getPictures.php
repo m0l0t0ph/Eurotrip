@@ -24,7 +24,7 @@
 			}
 		}
 	}
-	
+	//var_dump($image_urls);
 	$eins = rand(0,19);
 	$zwei = rand(0,19);
 	while($zwei==$eins){
@@ -43,17 +43,5 @@
 	echo $image_urls[$drei];
 	echo '"}';
 	
-	// $result = array();
-	//     
-	//     $result["img_url1"] = $image_urls[$eins];
-	//     $result["img_url2"] = $image_urls[$zwei];
-	//     $result["img_url3"] = $image_urls[$drei];
-	//     echo json_encode($result);
-	
-	//echo '<img src='.$image_urls[$eins].'></img><br>';
-	//echo $image_urls[$eins].'<br><br><br>';
-	//echo '<img src='.$image_urls[$zwei].'></img><br>';
-	//echo $image_urls[$zwei].'<br><br><br>';
-	//echo '<img src='.$image_urls[$drei].'></img><br>';
-	//echo $image_urls[$drei].'<br><br><br>';
+
 ?>
