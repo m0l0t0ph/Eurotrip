@@ -1,21 +1,22 @@
 $(function() {
    
    Game.init();
-   $('#getMorePics').click(function() {
+   $.blockUI.defaults.css = {};
+   $('#getMorePics').click(function(event) {
+	    event.preventDefault();
 	    Answers.city[Answers.currentPointer].images = [];
 	    Question.getPictures();
 	});
-   $('.loading')
-       .hide()  // hide it initially
-       .ajaxStart(function() {
-           $(this).show();
-       })
-       .ajaxStop(function() {
-           $(this).hide();
-       });
+	$('#getInfo').click(function(event) {
+    	    event.preventDefault();
+    	    Question.getInfo();
+    });
+    $('#answer a').click(function(event) {
+		    event.preventDefault();
+    	    Question.generate();
+    });
  });
  
-
 var markersArray = [];
 var infowindowsArray = [];
 
@@ -27,8 +28,9 @@ var Game = {
     
     pointsTotal: 0,
     questionNr: 0,
+    
+    //Setup the game for the first time
     init: function() {
-        
         Question.generate();
         Map.load();
     },
@@ -46,6 +48,7 @@ var Game = {
         Answers.reset();
         Question.generate();
     },
+    //Punkte berechnen
     calcPoints: function(entfernung) {
     	var points = 0;
     	entfernung = Math.round(entfernung);
@@ -61,7 +64,7 @@ var Game = {
 };
 
 var Map = {
-    // Settings
+    // Basic Map Settings
     config: {
         myLatlng: new google.maps.LatLng(48.99643826296838, 8.397674685546917),
         rendererOptions: { preserveViewport: true },
@@ -96,10 +99,10 @@ var Map = {
             }
         ],
         myOptions: {
-                zoom: 4,
+                zoom: 5,
                 center: new google.maps.LatLng(48.99643826296838, 8.397674685546917),
                 mapTypeControl: false,
-                navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+                navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL, position: google.maps.ControlPosition.TOP_RIGHT },
                 streetViewControl: false,
                 mapTypeId: google.maps.MapTypeId.TERRAIN
             }
@@ -146,11 +149,24 @@ var Map = {
     			ergebnisArray[1] = result.routes[0].legs[0].duration.text;
                 
                 ergebnisArray[2] = Game.calcPoints(ergebnisArray[0]);
-    			Map.placeMarker(clickedLocation, ergebnisArray);
-                
-    			
-    		}
+                Map.showAnswer(ergebnisArray);
+    			//Map.placeMarker(clickedLocation, ergebnisArray);
+            }
     	});
+    },
+    showAnswer: function(result) {
+        
+        $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
+        var answer = result[2] +" Punkte!<br>" +
+    	                    "Die richtige Antwort war:<p>" + Answers.city[Answers.currentPointer].name + "</p>" +
+    	                    "Du liegst " + result[0] + "km daneben. <br>" +
+    	                    "Da müsstest du noch " + result[1] + " fahren.<br>";
+    	$('#answerText').html(answer);
+        
+        $('#hint').hide();
+        $('#photos').hide();
+        $('#answer').fadeIn('fast');
+        
     },
     placeMarker: function(location, ergebnisArray) {
         //alle vorherigen Marker und Blasen entfernen
@@ -164,7 +180,7 @@ var Map = {
 
     	//var bubbleContent = "Position " + location + "<br>Entfernung: " + Math.round(ergebnisArray[0]) + " km<br>" + ergebnisArray[2]
     	//neue Infoblase
-    	var bubbleContent = "<article class=\"infowindow\">"+ ergebnisArray[2] +" Punkte!<br>" +
+    	var bubbleContent = "<article class=\"overlay\">"+ ergebnisArray[2] +" Punkte!<br>" +
     	                    "Die richtig Antwort war " + Answers.city[Answers.currentPointer].name + ". <br>" +
     	                    "Du liegst " + ergebnisArray[0] + "km daneben. <br>" +
     	                    "Da musst du noch " + ergebnisArray[1] + " fahren.<br>" +
@@ -183,7 +199,8 @@ var Map = {
     		//nq.css('margin-top', '10px');
     		var infow = $('.infowindow');
     		infow.css('text-align', 'center');
-    		nq.click(function() {
+    		nq.click(function(event) {
+    		    event.preventDefault();
         	    Question.generate();
         	});
     	});
@@ -210,15 +227,16 @@ var Map = {
 };
 
 var Question = {
-    
+    //Frage erzeugen
     generate: function() {
-        //Answers.reset();
         Game.setQuestionNr();
+        
+        //Wenn 1. Frage, dann Städtenamen holen
         if(Game.questionNr == 1) {
             this.getCity();
         }
         else {
-            
+            //Zuletzt gefragten Ort entfernen, damit er nicht wieder abgefragt wird
             Answers.removeElement(Answers.currentPointer);
             console.log("removed Element nr: " + Answers.currentPointer);
             Map.load();
@@ -230,41 +248,51 @@ var Question = {
         $.getJSON("getCity.php", function(data) {
     	  for(var i=0, limit=data.length; i<limit; i++) {
     	      tempCity = new City();
-    	      tempCity.name = data[i];
+    	      tempCity.name = data[i][0];
+    	      tempCity.dbPediaUrl = data[i][1];
     	      Answers.city[i] = tempCity;
     	  }
     	  console.log(Answers.city);
     	  Question.getSights();
     	});
     },
-    
     getSights: function() {
-        console.log(Answers.city);
+        //console.log(Answers.city);
         var to = Answers.city.length;
         Answers.currentPointer = Math.floor(Math.random() * (to - 1));
         console.log(Answers.currentPointer);
         //Answers.currentPointer = Math.round(Math.random()*10);
         var city = Answers.city[Answers.currentPointer].name;
         console.log("getSights city: "+city);
-        $.getJSON("getLocation.php?",
+        $.getJSON("getLocation.php",
                     { location: city }, 
                     function(data) {
-    	                //sightsAnswer = data.locations;
-    	                //console.log(city);
     	                console.log("getSights data.locations: "+data.locations);
     	                if($.isArray(data.locations)) {
     	                    $.each(data.locations, function(i, value) {
         	                    Answers.city[Answers.currentPointer].sights.push(value);
         	                });
-        	                //console.log("getSights: "+data.locations);
     	                }
     	                
     	                console.log(Answers.city);
     	                Question.getPictures();
     	            });
     },
-    
+    getInfo: function() {
+        var dbPedia = Answers.city[Answers.currentPointer].dbPediaUrl;
+        $.getJSON("getInfo.php", 
+                { city: Answers.city[Answers.currentPointer].name,
+                  dbPediaUrl: dbPedia }, function(data) {
+            $('#hintText').html(data);
+            $('div#photos').fadeOut('fast', function() {
+                
+                $('#hint').fadeIn('fast');
+            });
+            
+        });
+    },
     getPictures: function() {
+        var dbPedia = Answers.city[Answers.currentPointer].dbPediaUrl;
         var location = [];
         location.push(Answers.city[Answers.currentPointer].name);
         console.log(location);
@@ -273,10 +301,10 @@ var Question = {
                 location = Answers.city[Answers.currentPointer].sights[i];
             }*/
             
-            
             console.log("getPictures location: "+location);
             $.getJSON("getPictures.php", 
-            { locName: location[i] },
+            { locName: location[i],
+              dbPediaUrl: dbPedia },
             function(data) {
                 Answers.city[Answers.currentPointer].images.push(data.img_url1);
                 Answers.city[Answers.currentPointer].images.push(data.img_url2);
@@ -288,15 +316,23 @@ var Question = {
             });
         }
     },
-    
     display: function() {
-        $('#photos').fadeOut('slow', function() {
-            $('#questions h2').replaceWith("<h2>Frage " + Game.questionNr + " von 10:</h2>");
-            $('#photos img').each(function(i) {
-                $(this).attr('src', Answers.city[Answers.currentPointer].images[i]);
+            $('#hint').hide();
+            $('#answer').hide();
+            $('#progress').html("Frage " + Game.questionNr + " von 10:");
+            $('#photos').fadeOut('fast', function() {
+                $('#photos img').each(function(i) {
+                    $(this).attr('src', Answers.city[Answers.currentPointer].images[i]);
+                });
+                $(this).fadeIn('fast');
+                $('div#map_canvas').unblock();
             });
-            $(this).fadeIn('slow');
-        });
+            
+            //Schreibe unsere gesammelten Daten in eine Datei
+            Question.writeResult();
+   },
+   writeResult: function() {
+       $.post("writeResult.php", { city: Answers.city[Answers.currentPointer]} );
    }
 };
 
@@ -313,10 +349,12 @@ var Answers = {
 
 var City = function() {
     this.name = "";
+    this.dbPediaUrl = "";
     this.sights = [];
     this.images = [];
     this.reset = function() {
         this.name = "";
+        this.dbPediaUrl = "";
         this.sights = [];
         this.images = [];
     }
@@ -334,3 +372,6 @@ function incCounter() {
 		}
 }
 
+function random(from, to){
+       return Math.round(Math.random() * (to - from + 1) + from);
+    }

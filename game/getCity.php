@@ -1,5 +1,5 @@
 <?php 
-
+include "check.php";
 // Settings
 $continent = "EU";
 $countryFocus = "DE";
@@ -38,18 +38,24 @@ $search = "http://api.geonames.org/searchJSON?q=&continentCode=$continent&lang=e
         }
 $resultLength = count($result);
 $location = array();
+$dbpediaUrl = array();
 for($i=0; count($location)<10; $i++) {
     $ran = rand(0, $resultLength);
     //Irgendwie gibt der 94. Wert immer null zurück, also ignorieren
     if($ran == 94) {
         continue;
     }
+    $cityName = $result[$ran];
+    $dbPedia = checkURL($cityName);
+    
     //Keine Duplikate
-    if(!in_array($result[$ran], $location)) {
-           $location[] = $result[$ran];
+    if(!in_array($cityName, $location) && $dbPedia) {
+           $city[0] = $cityName;
+           $city[1] = $dbPedia;
+           $location[] = $city;
         }
     
 }
-	
+//var_dump($location);	
 echo json_encode($location);
 ?>

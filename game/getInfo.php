@@ -88,25 +88,6 @@ $requestURL = getUrlDbpediaAbstract($term);
 
 $responseArray = json_decode(request($requestURL),true); 
 
-
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-
-<title>Using SPARQL in code: REST, PHP and JSON [EXAMPLE CODE]</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-</head>
-
-<body>
-<h1>DBPedia Abstract for 
-<?php echo $term ?></h1>
-
-<?php 
   // abstract als string ermitteln und Stadt durch XXX ersetzen
   $AbstractString = $responseArray["results"]["bindings"][0]["abstract"]["value"];
   // echo $AbstractString; 
@@ -114,16 +95,12 @@ $responseArray = json_decode(request($requestURL),true);
   $AbstractString = str_replace($term, "XXX", $AbstractString);    
   $AbstractString = "...".substr($AbstractString, 0, 200 )."..."; 
   
-  echo $AbstractString;
+  echo json_encode($AbstractString);
   
-  
-
 //$rest = substr("abcdef", 1, 3 ); // gibt "bcd" zurück
 //echo strlen($string)
 ?>
-  
-</body>
-</html>
+ 
 
 
  
