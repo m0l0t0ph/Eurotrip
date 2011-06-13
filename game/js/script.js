@@ -2,6 +2,7 @@ $(function() {
    
    Game.init();
    $.blockUI.defaults.css = {};
+   $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
    $('#getMorePics').click(function(event) {
 	    event.preventDefault();
 	    Answers.city[Answers.currentPointer].images = [];
@@ -48,7 +49,7 @@ var Game = {
         Answers.reset();
         Question.generate();
     },
-    //Punkte berechnen
+    //Calculate points
     calcPoints: function(entfernung) {
     	var points = 0;
     	entfernung = Math.round(entfernung);
@@ -155,16 +156,15 @@ var Map = {
     	});
     },
     showAnswer: function(result) {
-        
         $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
-        var answer = result[2] +" Punkte!<br>" +
-    	                    "Die richtige Antwort war:<p>" + Answers.city[Answers.currentPointer].name + "</p>" +
-    	                    "Du liegst " + result[0] + "km daneben. <br>" +
-    	                    "Da müsstest du noch " + result[1] + " fahren.<br>";
+        var answer = result[2] +" points!<br>" +
+    	                    "The correct answer is:<p>" + Answers.city[Answers.currentPointer].name + "</p>" +
+    	                    "You missed it by " + result[0] + "km. <br>" +
+    	                    "That would mean a " + result[1] + " drive.";
     	$('#answerText').html(answer);
         
         $('#hint').hide();
-        $('#photos').hide();
+        $('.polaroid').hide();
         $('#answer').fadeIn('fast');
         
     },
@@ -284,10 +284,19 @@ var Question = {
                 { city: Answers.city[Answers.currentPointer].name,
                   dbPediaUrl: dbPedia }, function(data) {
             $('#hintText').html(data);
-            $('div#photos').fadeOut('fast', function() {
-                
-                $('#hint').fadeIn('fast');
+            
+            var height = $('#hint').outerHeight(true);
+            
+            $('div.polaroid').each(function(i) {
+                if(i>0) {
+                    var move = i*height/2;
+                    $(this).animate({
+                        top: '-='+move
+                        }, 600);
+                }
             });
+            $('#hint').slideDown('slow');
+            $('#getInfo').fadeOut('fast');
             
         });
     },
@@ -317,16 +326,24 @@ var Question = {
         }
     },
     display: function() {
-            $('#hint').hide();
+            $('#getInfo').fadeIn();
             $('#answer').hide();
-            $('#progress').html("Frage " + Game.questionNr + " von 10:");
-            $('#photos').fadeOut('fast', function() {
-                $('#photos img').each(function(i) {
+            $('#progress').html("Question " + Game.questionNr + " out of 10:");
+            var height = $('#hint').outerHeight(true);
+            $('#hint').slideUp('slow');
+            $('div.polaroid').each(function(i) {
+                var move = i*-20;
+                $(this).animate({
+                    top: move+'px'
+                    }, 600);
+                });
+            //$('div.polaroid').fadeOut('fast', function() {
+                $('div.polaroid img').each(function(i) {
                     $(this).attr('src', Answers.city[Answers.currentPointer].images[i]);
                 });
-                $(this).fadeIn('fast');
+                //$(this).fadeIn('fast');
                 $('div#map_canvas').unblock();
-            });
+            //});
             
             //Schreibe unsere gesammelten Daten in eine Datei
             Question.writeResult();
@@ -360,6 +377,7 @@ var City = function() {
     }
 };
 
+/** Helper Functions **/
 function incCounter() {
     var points = $('#points');
 		var currCount = parseInt(points.html());
@@ -374,4 +392,16 @@ function incCounter() {
 
 function random(from, to){
        return Math.round(Math.random() * (to - from + 1) + from);
-    }
+}
+/**
+{"name":"Essen","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Essen","sights":"","images":["http:\/\/farm3.static.flickr.com\/2593\/3915292287_e7208ce0bb_m.jpg","http:\/\/farm3.static.flickr.com\/2512\/3915722217_82aeb049e4_m.jpg","http:\/\/farm3.static.flickr.com\/2784\/4398785105_f47f92c518_m.jpg"],"reset":"undefined"}
+{"name":"Lyon","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Lyon","sights":"","images":["http:\/\/farm1.static.flickr.com\/216\/447045880_265a2b1713_m.jpg","http:\/\/farm3.static.flickr.com\/2563\/3929341945_b87d251255_m.jpg","http:\/\/farm5.static.flickr.com\/4106\/5204351388_6ae082ebf0_m.jpg"],"reset":"undefined"}
+{"name":"Edinburgh","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Edinburgh","sights":"","images":["http:\/\/farm4.static.flickr.com\/3026\/2744888752_da26564b80_m.jpg","http:\/\/farm4.static.flickr.com\/3085\/2725046931_a3e4149f8a_m.jpg","http:\/\/farm4.static.flickr.com\/3153\/2850925558_fbafb220e3_m.jpg"],"reset":"undefined"}
+{"name":"Kiel","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Kiel","sights":"","images":["http:\/\/farm1.static.flickr.com\/138\/324646563_8cd634124f_m.jpg","http:\/\/farm5.static.flickr.com\/4023\/4441728930_232d52f840_m.jpg","http:\/\/farm3.static.flickr.com\/2693\/4026300779_175028ee6c_m.jpg"],"reset":"undefined"}
+{"name":"Aachen","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Aachen","sights":"","images":["http:\/\/farm5.static.flickr.com\/4122\/4814436023_690539471a_m.jpg","http:\/\/farm4.static.flickr.com\/3234\/2840651968_01557e6f41_m.jpg","http:\/\/farm5.static.flickr.com\/4037\/4309526785_7c038bcc4b_m.jpg"],"reset":"undefined"}
+{"name":"Helsinki","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Helsinki","sights":["Suomenlinna","Sibelius monument","Museum of Cultures, Helsinki","Kiasma, Helsinki","Ateneum","Eduskuntatalo","Helsinki City Art Museum","Finlandia Hall, Helsinki","Seurasaari","Helsinki Olympic Stadium"],"images":["http:\/\/farm1.static.flickr.com\/74\/191476713_2590710b39_m.jpg","http:\/\/farm1.static.flickr.com\/20\/73755547_36dcc65271_m.jpg","http:\/\/farm1.static.flickr.com\/4\/4108415_453fca2a8c_m.jpg"],"reset":"undefined"}
+{"name":"Bochum","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Bochum","sights":"","images":["http:\/\/farm4.static.flickr.com\/3154\/2769848959_f9ab967951_m.jpg","http:\/\/farm4.static.flickr.com\/3283\/2770690256_2ae7680109_m.jpg","http:\/\/farm4.static.flickr.com\/3251\/2770686608_a0659c4829_m.jpg"],"reset":"undefined"}
+{"name":"Turin","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Turin","sights":["Royal Palace of Turin","Palazzo Madama","Cathedral of Saint John the Baptist","Palatine Towers","Observatory of Turin","Mole Antonelliana"],"images":["http:\/\/farm4.static.flickr.com\/3132\/2874281671_9fd33d7122_m.jpg","http:\/\/farm1.static.flickr.com\/218\/519568420_895355f139_m.jpg","http:\/\/farm4.static.flickr.com\/3190\/2872425749_bccc7e1f60_m.jpg"],"reset":"undefined"}
+{"name":"Homyel","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Homyel","sights":"","images":["http:\/\/farm5.static.flickr.com\/4069\/4411543643_0bff9e7333_m.jpg","http:\/\/farm3.static.flickr.com\/2803\/4300632935_7171fc2e87_m.jpg","http:\/\/farm4.static.flickr.com\/3395\/3632493896_759cd2d9f5_m.jpg"],"reset":"undefined"}
+{"name":"Lyon","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Lyon","sights":"","images":["http:\/\/farm5.static.flickr.com\/4069\/4411543643_0bff9e7333_m.jpg","http:\/\/farm3.static.flickr.com\/2803\/4300632935_7171fc2e87_m.jpg","http:\/\/farm4.static.flickr.com\/3395\/3632493896_759cd2d9f5_m.jpg"],"reset":"undefined"}
+**/
