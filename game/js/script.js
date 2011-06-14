@@ -10,7 +10,7 @@ $(function() {
 	});
 	$('#getInfo').click(function(event) {
     	    event.preventDefault();
-    	    Question.getInfo();
+    	    Question.displayHint();
     });
     $('#answer a').click(function(event) {
 		    event.preventDefault();
@@ -156,18 +156,19 @@ var Map = {
     	});
     },
     showAnswer: function(result) {
+        $('#navigation > a').hide();
+        $('#hint').hide();
+        $('.polaroid').hide();
         $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
         var answer = result[2] +" points!<br>" +
     	                    "The correct answer is:<p>" + Answers.city[Answers.currentPointer].name + "</p>" +
     	                    "You missed it by " + result[0] + "km. <br>" +
     	                    "That would mean a " + result[1] + " drive.";
     	$('#answerText').html(answer);
-        
-        $('#hint').hide();
-        $('.polaroid').hide();
         $('#answer').fadeIn('fast');
         
     },
+    /**Deprecated**/
     placeMarker: function(location, ergebnisArray) {
         //alle vorherigen Marker und Blasen entfernen
     	Map.reset();
@@ -227,7 +228,6 @@ var Map = {
 };
 
 var Question = {
-    //Frage erzeugen
     generate: function() {
         Game.setQuestionNr();
         
@@ -236,7 +236,10 @@ var Question = {
             this.getCity();
         }
         else {
-            //Zuletzt gefragten Ort entfernen, damit er nicht wieder abgefragt wird
+            /** Write collected data set to file **/
+            Question.writeResult();
+            
+            /** Zuletzt gefragten Ort entfernen, damit er nicht wieder abgefragt wird **/
             Answers.removeElement(Answers.currentPointer);
             console.log("removed Element nr: " + Answers.currentPointer);
             Map.load();
@@ -257,11 +260,13 @@ var Question = {
     	});
     },
     getSights: function() {
-        //console.log(Answers.city);
         var to = Answers.city.length;
         Answers.currentPointer = Math.floor(Math.random() * (to - 1));
         console.log(Answers.currentPointer);
-        //Answers.currentPointer = Math.round(Math.random()*10);
+        
+        /** preload abstract for performance purposes **/
+        Question.getHint();
+        
         var city = Answers.city[Answers.currentPointer].name;
         console.log("getSights city: "+city);
         $.getJSON("getLocation.php",
@@ -275,30 +280,18 @@ var Question = {
     	                }
     	                
     	                console.log(Answers.city);
+    	                /** now that we have the sights, get the matching pictures **/
     	                Question.getPictures();
     	            });
     },
-    getInfo: function() {
+    getHint: function() {
         var dbPedia = Answers.city[Answers.currentPointer].dbPediaUrl;
         $.getJSON("getInfo.php", 
-                { city: Answers.city[Answers.currentPointer].name,
-                  dbPediaUrl: dbPedia }, function(data) {
-            $('#hintText').html(data);
-            
-            var height = $('#hint').outerHeight(true);
-            
-            $('div.polaroid').each(function(i) {
-                if(i>0) {
-                    var move = i*height/2;
-                    $(this).animate({
-                        top: '-='+move
-                        }, 600);
-                }
-            });
-            $('#hint').slideDown('slow');
-            $('#getInfo').fadeOut('fast');
-            
-        });
+                { city:         Answers.city[Answers.currentPointer].name,
+                  dbPediaUrl:   dbPedia 
+                  }, function(data) {
+                      Answers.city[Answers.currentPointer].abstract = data;
+                  });
     },
     getPictures: function() {
         var dbPedia = Answers.city[Answers.currentPointer].dbPediaUrl;
@@ -320,34 +313,60 @@ var Question = {
                 Answers.city[Answers.currentPointer].images.push(data.img_url3);
                 console.log("image URL: " + Answers.city[Answers.currentPointer].images);
                 if(Answers.city[Answers.currentPointer].images.length == 3) {
-                    Question.display();
+                    Question.displayQuestion();
                 }
             });
         }
     },
-    display: function() {
-            $('#getInfo').fadeIn();
-            $('#answer').hide();
-            $('#progress').html("Question " + Game.questionNr + " out of 10:");
-            var height = $('#hint').outerHeight(true);
-            $('#hint').slideUp('slow');
-            $('div.polaroid').each(function(i) {
-                var move = i*-20;
+    displayHint: function() {
+        $('#hintText').html(Answers.city[Answers.currentPointer].abstract);
+        
+        var height = $('#hint').outerHeight(true);
+        
+        $('div.polaroid').each(function(i) {
+            if(i>0) {
+                var move = i*height/2;
                 $(this).animate({
-                    top: move+'px'
+                    top: '-='+move
                     }, 600);
-                });
-            //$('div.polaroid').fadeOut('fast', function() {
-                $('div.polaroid img').each(function(i) {
-                    $(this).attr('src', Answers.city[Answers.currentPointer].images[i]);
-                });
-                //$(this).fadeIn('fast');
-                $('div#map_canvas').unblock();
-            //});
+            }
+        });
+        $('#hint').slideDown('slow');
+        $('#getInfo').fadeOut('fast');
+    },
+    displayQuestion: function() {
+        $('div.polaroid img').each(function(i) {
+            $(this).attr('src', Answers.city[Answers.currentPointer].images[i]);
+        });
+        $('div.polaroid').each(function(i) {
+            var move = i*-20;
+            $(this).animate({
+                top: move+'px'
+                }, 600);
+        });
+        if($('#getMorePics').is(":hidden")) {
+            $('#getMorePics').fadeIn();
+        }
+        if($('#getInfo').is(":hidden")) {
+            $('#getInfo').fadeIn();
+        }
+        if($('#hint').is(":visible")) {
+            $('#hint').slideUp('slow');
+        }
+        
+        $('#answer').hide();
+        $('#progress').html("Question " + Game.questionNr + " out of 10:");
+        var height = $('#hint').outerHeight(true);
+
+        
+        if($('.polaroid').is(":hidden")) {
+                $('.polaroid').fadeIn();
+        }
+        $('div#map_canvas').unblock();
+
+
             
-            //Schreibe unsere gesammelten Daten in eine Datei
-            Question.writeResult();
-   },
+        },
    writeResult: function() {
        $.post("writeResult.php", { city: Answers.city[Answers.currentPointer]} );
    }
@@ -367,6 +386,7 @@ var Answers = {
 var City = function() {
     this.name = "";
     this.dbPediaUrl = "";
+    this.abstract = "";
     this.sights = [];
     this.images = [];
     this.reset = function() {
@@ -393,15 +413,3 @@ function incCounter() {
 function random(from, to){
        return Math.round(Math.random() * (to - from + 1) + from);
 }
-/**
-{"name":"Essen","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Essen","sights":"","images":["http:\/\/farm3.static.flickr.com\/2593\/3915292287_e7208ce0bb_m.jpg","http:\/\/farm3.static.flickr.com\/2512\/3915722217_82aeb049e4_m.jpg","http:\/\/farm3.static.flickr.com\/2784\/4398785105_f47f92c518_m.jpg"],"reset":"undefined"}
-{"name":"Lyon","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Lyon","sights":"","images":["http:\/\/farm1.static.flickr.com\/216\/447045880_265a2b1713_m.jpg","http:\/\/farm3.static.flickr.com\/2563\/3929341945_b87d251255_m.jpg","http:\/\/farm5.static.flickr.com\/4106\/5204351388_6ae082ebf0_m.jpg"],"reset":"undefined"}
-{"name":"Edinburgh","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Edinburgh","sights":"","images":["http:\/\/farm4.static.flickr.com\/3026\/2744888752_da26564b80_m.jpg","http:\/\/farm4.static.flickr.com\/3085\/2725046931_a3e4149f8a_m.jpg","http:\/\/farm4.static.flickr.com\/3153\/2850925558_fbafb220e3_m.jpg"],"reset":"undefined"}
-{"name":"Kiel","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Kiel","sights":"","images":["http:\/\/farm1.static.flickr.com\/138\/324646563_8cd634124f_m.jpg","http:\/\/farm5.static.flickr.com\/4023\/4441728930_232d52f840_m.jpg","http:\/\/farm3.static.flickr.com\/2693\/4026300779_175028ee6c_m.jpg"],"reset":"undefined"}
-{"name":"Aachen","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Aachen","sights":"","images":["http:\/\/farm5.static.flickr.com\/4122\/4814436023_690539471a_m.jpg","http:\/\/farm4.static.flickr.com\/3234\/2840651968_01557e6f41_m.jpg","http:\/\/farm5.static.flickr.com\/4037\/4309526785_7c038bcc4b_m.jpg"],"reset":"undefined"}
-{"name":"Helsinki","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Helsinki","sights":["Suomenlinna","Sibelius monument","Museum of Cultures, Helsinki","Kiasma, Helsinki","Ateneum","Eduskuntatalo","Helsinki City Art Museum","Finlandia Hall, Helsinki","Seurasaari","Helsinki Olympic Stadium"],"images":["http:\/\/farm1.static.flickr.com\/74\/191476713_2590710b39_m.jpg","http:\/\/farm1.static.flickr.com\/20\/73755547_36dcc65271_m.jpg","http:\/\/farm1.static.flickr.com\/4\/4108415_453fca2a8c_m.jpg"],"reset":"undefined"}
-{"name":"Bochum","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Bochum","sights":"","images":["http:\/\/farm4.static.flickr.com\/3154\/2769848959_f9ab967951_m.jpg","http:\/\/farm4.static.flickr.com\/3283\/2770690256_2ae7680109_m.jpg","http:\/\/farm4.static.flickr.com\/3251\/2770686608_a0659c4829_m.jpg"],"reset":"undefined"}
-{"name":"Turin","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Turin","sights":["Royal Palace of Turin","Palazzo Madama","Cathedral of Saint John the Baptist","Palatine Towers","Observatory of Turin","Mole Antonelliana"],"images":["http:\/\/farm4.static.flickr.com\/3132\/2874281671_9fd33d7122_m.jpg","http:\/\/farm1.static.flickr.com\/218\/519568420_895355f139_m.jpg","http:\/\/farm4.static.flickr.com\/3190\/2872425749_bccc7e1f60_m.jpg"],"reset":"undefined"}
-{"name":"Homyel","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Homyel","sights":"","images":["http:\/\/farm5.static.flickr.com\/4069\/4411543643_0bff9e7333_m.jpg","http:\/\/farm3.static.flickr.com\/2803\/4300632935_7171fc2e87_m.jpg","http:\/\/farm4.static.flickr.com\/3395\/3632493896_759cd2d9f5_m.jpg"],"reset":"undefined"}
-{"name":"Lyon","dbPediaUrl":"http:\/\/dbpedia.org\/page\/Lyon","sights":"","images":["http:\/\/farm5.static.flickr.com\/4069\/4411543643_0bff9e7333_m.jpg","http:\/\/farm3.static.flickr.com\/2803\/4300632935_7171fc2e87_m.jpg","http:\/\/farm4.static.flickr.com\/3395\/3632493896_759cd2d9f5_m.jpg"],"reset":"undefined"}
-**/
