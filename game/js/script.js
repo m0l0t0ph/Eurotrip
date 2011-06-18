@@ -371,11 +371,16 @@ var Question = {
     
     /** displays the pictures of the question **/
     displayQuestion: function() {
+        if($('#hint').is(":visible")) {
+            this.picturesSlide("up");
+        }
+        
         $('div.polaroid img').each(function(i) {
             $(this).attr('src', Answers.currentCity.images[i]);
         });
-        
-        this.picturesSlide("up");
+        $('.polaroid').fadeOut('slow', function() {
+            $(this).fadeIn('slow');
+        });
         
         if($('#bonusQuestion').is(":visible")) {
         $('#bonusQuestion').fadeOut('fast');
@@ -391,9 +396,7 @@ var Question = {
         $('#progress').html("Question " + Game.questionNr + " out of 10:");
 
         
-        if($('.polaroid').is(":hidden")) {
-                $('.polaroid').fadeIn();
-        }
+        
         $('div#map_canvas').unblock();
     },
   
