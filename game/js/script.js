@@ -238,6 +238,7 @@ var Question = {
         
         /** pick last city as question, cache it and remove it from array (stack...) **/
         Answers.currentCity = Answers.cities.pop();
+        console.log(Answers.currentCity);
         
         if (Game.questionNr === 1) {
             this.getPictures(false);
@@ -260,7 +261,6 @@ var Question = {
         /** preload bonus question for better responsivness **/
         this.getBonusQuestion();
         
-        console.log("Elements left: " + Answers.cities.length);
     },
     
     /** loads part of abstract as a hint to the player **/
@@ -371,9 +371,8 @@ var Question = {
     
     /** displays the pictures of the question **/
     displayQuestion: function() {
-        if($('#hint').is(":visible")) {
-            this.picturesSlide("up");
-        }
+        
+        this.picturesSlide("up");
         
         $('div.polaroid img').each(function(i) {
             $(this).attr('src', Answers.currentCity.images[i]);
