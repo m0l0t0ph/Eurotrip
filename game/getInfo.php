@@ -1,42 +1,45 @@
-<?php 
+<?php
+// bekommt Stadt als Übergabewert und liefert Teil des DBpedia abstracts als SMS Hilfe zurück
 
-	if (isset($_GET['city'])){
-		$term = $_GET['city'];
-	}
-	else {
-		$term = 'Berlin';
-	}
+// Überprüfung des Übergabeparameter
+if (isset($_GET['city'])){
+    $term = $_GET['city'];
+}
+else {
+    $term = 'Berlin';
+}
 
 
+// Query nach DPpedia
 function getUrlDbpediaAbstract($term)
 {
    $format = 'json';
  
-   $query = 
+   $query =
    "PREFIX dbp: <http://dbpedia.org/resource/>
-   PREFIX dbp2: <http://dbpedia.org/ontology/>
+	PREFIX dbp2: <http://dbpedia.org/ontology/>
+	SELECT ?abstract
+	WHERE {
+		dbp:".$term." dbp2:abstract ?abstract .
+		FILTER langMatches(lang(?abstract), 'en')
+		}";
  
-   SELECT ?abstract
-   WHERE {
-      dbp:".$term." dbp2:abstract ?abstract . 
-      FILTER langMatches(lang(?abstract), 'en')
-   }";
- 
-   $searchUrl = 'http://dbpedia.org/sparql?'
+   $searchUrl = 'http://dbpedia.org/sparql?' // Endpoint der DBpedia
       .'query='.urlencode($query)
       .'&format='.$format;
-	  
+
    return $searchUrl;
 }
 
 
+// HTTP request mit cURL
 function request($url){
  
-   // is curl installed? 
-   if (!function_exists('curl_init')){ 
-      die('CURL is not installed!'); 
+   // is curl installed?
+   if (!function_exists('curl_init')){
+      die('CURL is not installed!');
    }
- 
+
    // get curl handle
    $ch= curl_init();
  
@@ -53,56 +56,18 @@ function request($url){
    return $response;
 }
 
-
-function printArray($array, $spaces = "")
-{
-   $retValue = "";
-	
-   if(is_array($array))
-   {	
-      $spaces = $spaces
-         ."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-
-      $retValue = $retValue."<br/>";
-
-      foreach(array_keys($array) as $key)
-      {
-         $retValue = $retValue.$spaces
-            ."<strong>".$key."</strong>"
-            .printArray($array[$key], 
-               $spaces);
-      }		
-      $spaces = substr($spaces, 0, -30);
-	  
-   }
-   else $retValue = 
-      $retValue." - ".$array."<br/>";
-	
-   return $retValue;
-}
-
-
-//$term = "Karlsruhe";
+// Aufruf, String-Anpassung und Rückgabe
 
 $requestURL = getUrlDbpediaAbstract($term);
 
-$responseArray = json_decode(request($requestURL),true); 
+$responseArray = json_decode(request($requestURL),true);
 
   // abstract als string ermitteln und Stadt durch XXX ersetzen
   $AbstractString = $responseArray["results"]["bindings"][0]["abstract"]["value"];
-  // echo $AbstractString; 
   
-  $AbstractString = str_replace($term, "XXX", $AbstractString);    
-  $AbstractString = "...".substr($AbstractString, 0, 200 )."..."; 
+  $AbstractString = str_replace($term, "XXX", $AbstractString);
+  $AbstractString = "...".substr($AbstractString, 50, 250 )."..."; // Position kann entsprechend im testing optimiert werden
   
   echo json_encode($AbstractString);
   
-//$rest = substr("abcdef", 1, 3 ); // gibt "bcd" zurück
-//echo strlen($string)
 ?>
- 
-
-
- 
-
-

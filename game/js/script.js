@@ -1,47 +1,60 @@
-$(function() {
-   
-   Game.init();
-   $.blockUI.defaults.css = {};
-   $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
-   $('#getMorePics').click(function(event) {
-	    event.preventDefault();
-	    Answers.city[Answers.currentPointer].images = [];
-	    Question.getPictures();
-	});
-	$('#getInfo').click(function(event) {
-    	    event.preventDefault();
-    	    Question.displayHint();
-    });
-    $('#answer a').click(function(event) {
-		    event.preventDefault();
-    	    Question.generate();
-    });
- });
- 
-var markersArray = [];
-var infowindowsArray = [];
-
 var Game = {
     //Settings
     startQuesPts: 1000,
     penaltyDistance: 1000,
     quesPerRound: 10,
+    distanceBonusQuestion: 100,
     
     pointsTotal: 0,
     questionNr: 0,
+    hasMorePics: false,
+    hasHint: false,
     
-    //Setup the game for the first time
+    /** Set up the game for the first time **/
     init: function() {
-        Question.generate();
+        Question.getCities();
         Map.load();
+        
+        var $getInfo = $('#getInfo');
+        $getInfo.find('span:last').hide();
+        $getInfo.find('b:last').hide();
+        
+        /** bind appropriate function to buttons **/
+        $.blockUI.defaults.css = {};
+        $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
+        $('#getMorePics').click(function(event) {
+            event.preventDefault();
+            Answers.currentCity.images = [];
+            Question.getPictures(false);
+            if (Game.hasMorePics === false) {
+                //$(this).fadeOut();
+                //Game.hasMorePics = true;
+                Game.calculatePoints(null, -200);
+            }
+        });
+        
+        $('#getInfo').click(function(event) {
+            event.preventDefault();
+            Question.displayHint();
+            if (Game.hasHint === false) {
+                Game.calculatePoints(null, -400);
+                Game.hasHint = true;
+            }
+        });
+        
+        $('#answer a').click(function(event) {
+            event.preventDefault();
+            Question.generate();
+        });
     },
     setQuestionNr: function() {
         if(this.questionNr < this.quesPerRound) {
             this.questionNr++;
             
-        }
-        else
+        } else {
             this.newRound();
+        }
+            
     },
     newRound: function() {
         this.pointsTotal = 0;
@@ -49,23 +62,44 @@ var Game = {
         Answers.reset();
         Question.generate();
     },
-    //Calculate points
-    calcPoints: function(entfernung) {
+    
+    /** Calculate points **/
+    calculatePoints: function(entfernung, diffPoints) {
     	var points = 0;
-    	entfernung = Math.round(entfernung);
-    	if(entfernung < Game.penaltyDistance) {
-    	    points = Game.startQuesPts - entfernung;
+    	if(entfernung !== null) {
+    	    entfernung = Math.round(entfernung);
+        	if(entfernung < this.penaltyDistance) {
+        	    points = this.startQuesPts - entfernung;
+        	}
+        	this.pointsTotal += points;
     	}
-    	Game.pointsTotal += points;
-
-    	//Hochzählanimation
-    	incCounter();
+    	if(diffPoints !== null) {
+    	    this.pointsTotal += diffPoints;
+        }
+        this.setPoints();
     	return points;
+    },
+    setPoints: function() {
+        var points = $('#points'),
+    	    currCount = parseInt(points.html());
+    	points.text(this.pointsTotal);
+        /**points.text(currCount + 7);
+        if (currCount + 7 <= this.pointsTotal) {
+            setTimeout('Game.setPoints()', 15);
+        } else {
+    		points.text(this.pointsTotal);
+    	}**/
     }
 };
 
 var Map = {
-    // Basic Map Settings
+    markersArray: [],
+    infowindowsArray: [],
+    map: {},
+    directionsService : {},
+    directionsDisplay: {},
+    
+    /** basic map settings **/
     config: {
         myLatlng: new google.maps.LatLng(48.99643826296838, 8.397674685546917),
         rendererOptions: { preserveViewport: true },
@@ -109,288 +143,313 @@ var Map = {
             }
     },
     
-   //Karte laden
+    /** load map **/
     load: function() {
-        directionsService = new google.maps.DirectionsService();
-        directionsDisplay = new google.maps.DirectionsRenderer(Map.config.rendererOptions);
-    	map = new google.maps.Map(document.getElementById("map_canvas"), Map.config.myOptions);
+        this.map = new google.maps.Map(document.getElementById("map_canvas"), this.config.myOptions);
+        var styledMapOptions = {
+    		    map: this.map,
+    		    name: "Spiel" },
+    	    gameMapType =  new google.maps.StyledMapType(this.config.mapStyle, styledMapOptions);
+        
+        this.directionsService = new google.maps.DirectionsService();
+        this.directionsDisplay = new google.maps.DirectionsRenderer(Map.config.rendererOptions);
     	
-    	styledMapOptions = {
-    		map: map,
-    		name: "Spiel"
-    	};
-    	var gameMapType =  new google.maps.StyledMapType(Map.config.mapStyle, styledMapOptions);
-
-    	map.mapTypes.set('Spiel', gameMapType);
-    	map.setMapTypeId('Spiel');
+    	
+    	
+    	this.map.mapTypes.set('Spiel', gameMapType);
+    	this.map.setMapTypeId('Spiel');
 
     	//auf den Klick reagieren, in dem getDistance() aufgerufen wird
-    	google.maps.event.addListener(map, 'click', function(event) {
+    	google.maps.event.addListener(this.map, 'click', function(event) {
     		Map.getDistance(event.latLng);
     	});
     },
     
-    //Entfernungsberechnung über GoogleMaps
+    /** get distance to actual location from Maps API **/
     getDistance: function(clickedLocation) {
-    	var userInput = clickedLocation;
-    	var request = {
-    		origin: Answers.city[Answers.currentPointer].name, 
-    		destination: userInput,
-    		provideRouteAlternatives: false,
-    		travelMode: google.maps.DirectionsTravelMode.DRIVING,
-    		unitSystem: google.maps.DirectionsUnitSystem.METRIC
-    	};
-        directionsDisplay.setMap(map);
-    	directionsService.route(request, function(result, status) {
-    		routeStatus = status;
-    		var ergebnisArray = [];
+    	var ergebnisArray = [],
+    	    userInput = clickedLocation,
+    	    request = {
+    		    origin:                     Answers.currentCity.name, 
+    		    destination:                userInput,
+    		    provideRouteAlternatives:   false,
+    		    travelMode:                 google.maps.DirectionsTravelMode.DRIVING,
+    		    unitSystem:                 google.maps.DirectionsUnitSystem.METRIC
+    	        };
+        this.directionsDisplay.setMap(this.map);
+    	this.directionsService.route(request, function(result, status) {
+    		
     		if (status == google.maps.DirectionsStatus.OK) {
-    			directionsDisplay.setDirections(result);
+    			Map.directionsDisplay.setDirections(result);
     			ergebnisArray[0] = Math.round(result.routes[0].legs[0].distance.value/1000);
     			ergebnisArray[1] = result.routes[0].legs[0].duration.text;
                 
-                ergebnisArray[2] = Game.calcPoints(ergebnisArray[0]);
-                Map.showAnswer(ergebnisArray);
-    			//Map.placeMarker(clickedLocation, ergebnisArray);
+                ergebnisArray[2] = Game.calculatePoints(ergebnisArray[0], null);
+                
+                Question.displayAnswer(ergebnisArray);
+                if (ergebnisArray[0] <= Game.distanceBonusQuestion) {
+                    Question.displayBonusQuestion();
+                }
             }
     	});
     },
-    showAnswer: function(result) {
-        $('#navigation > a').hide();
-        $('#hint').hide();
-        $('.polaroid').hide();
-        $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
-        var answer = result[2] +" points!<br>" +
-    	                    "The correct answer is:<p>" + Answers.city[Answers.currentPointer].name + "</p>" +
-    	                    "You missed it by " + result[0] + "km. <br>" +
-    	                    "That would mean a " + result[1] + " drive.";
-    	$('#answerText').html(answer);
-        $('#answer').fadeIn('fast');
-        
-    },
-    /**Deprecated**/
-    placeMarker: function(location, ergebnisArray) {
-        //alle vorherigen Marker und Blasen entfernen
-    	Map.reset();
-    	//neuer Marker
-    	var marker = new google.maps.Marker({
-    		position: location, 
-    		map: map
-    	});
-    	markersArray.push(marker);
-
-    	//var bubbleContent = "Position " + location + "<br>Entfernung: " + Math.round(ergebnisArray[0]) + " km<br>" + ergebnisArray[2]
-    	//neue Infoblase
-    	var bubbleContent = "<article class=\"overlay\">"+ ergebnisArray[2] +" Punkte!<br>" +
-    	                    "Die richtig Antwort war " + Answers.city[Answers.currentPointer].name + ". <br>" +
-    	                    "Du liegst " + ergebnisArray[0] + "km daneben. <br>" +
-    	                    "Da musst du noch " + ergebnisArray[1] + " fahren.<br>" +
-    	                    "<a id=\"nq\" href=\"#\">Nächste Frage</a></article>";
-
-    	var infowindow = new google.maps.InfoWindow(
-    		{ content: bubbleContent,
-    		size: new google.maps.Size(50,50),
-    		position: location
-    	});
-    	infowindow.open(map);
-
-    	//Wenn Infowindow 'fertig', Link entsprechend bearbeiten
-    	google.maps.event.addListener(infowindow, 'domready', function() {
-    		var nq = $('#nq');
-    		//nq.css('margin-top', '10px');
-    		var infow = $('.infowindow');
-    		infow.css('text-align', 'center');
-    		nq.click(function(event) {
-    		    event.preventDefault();
-        	    Question.generate();
-        	});
-    	});
-    	infowindowsArray.push(infowindow);
-    	//Karte auf den geklickten Ort zentrieren
-    	//map.setCenter(location);
-    },
+    
     reset: function() {
         //map.setCenter(Map.config.myOptions.center);
         //Entfernt alle Marker und Infowindows
-    	if (markersArray) {
-    		for (i in markersArray) {
-    			markersArray[i].setMap(null);
+    	if (this.markersArray) {
+    		for (i in this.markersArray) {
+    			this.markersArray[i].setMap(null);
     		}
-    		markersArray.length = 0;
+    		this.markersArray.length = 0;
     	}
-    	if (infowindowsArray) {
-    		for (i in infowindowsArray) {
-    			infowindowsArray[i].setMap(null);
+    	if (this.infowindowsArray) {
+    		for (i in this.infowindowsArray) {
+    			this.infowindowsArray[i].setMap(null);
     		}
-    		infowindowsArray.length = 0;
+    		this.infowindowsArray.length = 0;
     	}
     }
 };
 
 var Question = {
+    /** loads a selection of ten cities **/
+    getCities: function() {
+        $.getJSON("getCity.php", function(data) {
+    	  for(var i = 0, limit = data.length; i < limit; i += 1) {
+    	      var tempCity = new City();
+    	      tempCity.name = data[i][0];
+    	      tempCity.dbPediaUrl = data[i][1];
+    	      tempCity.country = data[i][2];
+    	      Answers.cities.push(tempCity);
+    	  }
+    	  
+    	  console.log(Answers.cities);
+    	  Question.generate();
+    	});
+    },
+    
     generate: function() {
         Game.setQuestionNr();
         
-        //Wenn 1. Frage, dann Städtenamen holen
-        if(Game.questionNr == 1) {
-            this.getCity();
-        }
-        else {
-            /** Write collected data set to file **/
-            Question.writeResult();
-            
-            /** Zuletzt gefragten Ort entfernen, damit er nicht wieder abgefragt wird **/
-            Answers.removeElement(Answers.currentPointer);
-            console.log("removed Element nr: " + Answers.currentPointer);
+        var $getInfo = $('#getInfo');
+        $getInfo.find('b:last').hide();
+        $getInfo.find('b:first').show();
+        
+        /** pick last city as question, cache it and remove it from array (stack...) **/
+        Answers.currentCity = Answers.cities.pop();
+        
+        if (Game.questionNr === 1) {
+            this.getPictures(false);
+        } else {
+            /** Marker usw. entfernen und Karte zentrieren.
+                evtl. zu radikal hier die komplette Karte neuzuladen **/
             Map.load();
-            this.getSights();
-        }
-        
-    },
-    getCity: function() {
-        $.getJSON("getCity.php", function(data) {
-    	  for(var i=0, limit=data.length; i<limit; i++) {
-    	      tempCity = new City();
-    	      tempCity.name = data[i][0];
-    	      tempCity.dbPediaUrl = data[i][1];
-    	      Answers.city[i] = tempCity;
-    	  }
-    	  console.log(Answers.city);
-    	  Question.getSights();
-    	});
-    },
-    getSights: function() {
-        var to = Answers.city.length;
-        Answers.currentPointer = Math.floor(Math.random() * (to - 1));
-        console.log(Answers.currentPointer);
-        
-        /** preload abstract for performance purposes **/
-        Question.getHint();
-        
-        var city = Answers.city[Answers.currentPointer].name;
-        console.log("getSights city: "+city);
-        $.getJSON("getLocation.php",
-                    { location: city }, 
-                    function(data) {
-    	                console.log("getSights data.locations: "+data.locations);
-    	                if($.isArray(data.locations)) {
-    	                    $.each(data.locations, function(i, value) {
-        	                    Answers.city[Answers.currentPointer].sights.push(value);
-        	                });
-    	                }
-    	                
-    	                console.log(Answers.city);
-    	                /** now that we have the sights, get the matching pictures **/
-    	                Question.getPictures();
-    	            });
-    },
-    getHint: function() {
-        var dbPedia = Answers.city[Answers.currentPointer].dbPediaUrl;
-        $.getJSON("getInfo.php", 
-                { city:         Answers.city[Answers.currentPointer].name,
-                  dbPediaUrl:   dbPedia 
-                  }, function(data) {
-                      Answers.city[Answers.currentPointer].abstract = data;
-                  });
-    },
-    getPictures: function() {
-        var dbPedia = Answers.city[Answers.currentPointer].dbPediaUrl;
-        var location = [];
-        location.push(Answers.city[Answers.currentPointer].name);
-        console.log(location);
-        for(var i=0; i<location.length; i++) {
-            /*if(Answers.city[Answers.currentPointer].sights.length != 0) {
-                location = Answers.city[Answers.currentPointer].sights[i];
-            }*/
             
-            console.log("getPictures location: "+location);
-            $.getJSON("getPictures.php", 
-            { locName: location[i],
-              dbPediaUrl: dbPedia },
+            Game.hasMorePics = false;
+            Game.hasHint = false;
+            
+            this.displayQuestion();
+        }
+        /** preload pictures for next question **/
+        this.getPictures(true);
+        
+        /** preload abstract for better responsivness **/
+        this.getHint();
+        
+        /** preload bonus question for better responsivness **/
+        this.getBonusQuestion();
+        
+        console.log("Elements left: " + Answers.cities.length);
+    },
+    
+    /** loads part of abstract as a hint to the player **/
+    getHint: function() {
+        $.getJSON("getInfo.php", 
+                { city:         Answers.currentCity.name,
+                  dbPediaUrl:   Answers.currentCity.dbPediaUrl 
+                  }, function(data) {
+                      Answers.currentCity.abstract = data;
+                      console.log(Answers.currentCity.abstract);
+        });
+    },
+    
+    /** loads pictures (with preloading option) **/
+    getPictures: function(isPreload) {
+        var location = Answers.cities[Answers.cities.length-1];
+        if (!isPreload) {
+            location = Answers.currentCity;
+        }
+        $.getJSON("getPictures.php", 
+        { locName: location.name,
+            dbPediaUrl: location.dbPediaUrl },
             function(data) {
-                Answers.city[Answers.currentPointer].images.push(data.img_url1);
-                Answers.city[Answers.currentPointer].images.push(data.img_url2);
-                Answers.city[Answers.currentPointer].images.push(data.img_url3);
-                console.log("image URL: " + Answers.city[Answers.currentPointer].images);
-                if(Answers.city[Answers.currentPointer].images.length == 3) {
+                location.images.push(data.img_url1);
+                location.images.push(data.img_url2);
+                location.images.push(data.img_url3);
+                console.log(location.images);
+                if(location.images.length === 3 && !isPreload) {
                     Question.displayQuestion();
                 }
-            });
+        });
+    },
+    getBonusQuestion: function() {
+        var countries = [],
+            ran = 0,
+            citiesLength = Answers.cities.length;
+        //console.log("length: " + citiesLength);
+        countries.push(Answers.currentCity.country);
+        for(var i = 0; countries.length < 3; i += 1) {
+            ran = Math.floor(Math.random()*citiesLength);
+            //console.log(ran);
+            if($.inArray(Answers.cities[ran].country, countries) === -1) {
+                countries.push(Answers.cities[ran].country);
+            }
+        }
+        
+        //console.log(countries);
+        $.getJSON("getFlag.php", 
+        { countries: countries },
+            function(data) {
+                $.each(data, function(country, pic) {
+                    
+                });
+                console.log(Bonus);
+        });
+    },
+    displayBonusQuestion: function() {
+        $.each(data, function(country, pic) {
+            console.log(country + ": "+ pic + "\n");
+        });
+        $('#bonusQuestion').fadeIn();
+    },
+    
+    /** displays the hint text **/
+    displayHint: function() {
+        $('#hintText').html(Answers.currentCity.abstract);
+        if($('#hint').is(":visible")) {
+            this.picturesSlide("up");
+        }
+        if($('#hint').is(":hidden")) {
+            this.picturesSlide("down");
         }
     },
-    displayHint: function() {
-        $('#hintText').html(Answers.city[Answers.currentPointer].abstract);
-        
-        var height = $('#hint').outerHeight(true);
-        
-        $('div.polaroid').each(function(i) {
-            if(i>0) {
-                var move = i*height/2;
+    
+    /** slide effect, takes "up" or "down" as a parameter **/
+    picturesSlide: function(direction) {
+        var $getInfo = $('#getInfo');
+        if(direction === "up") {
+            $('div.polaroid').each(function(i) {
+                var move = i*-20;
                 $(this).animate({
-                    top: '-='+move
-                    }, 600);
-            }
-        });
-        $('#hint').slideDown('slow');
-        $('#getInfo').fadeOut('fast');
+                    top: move+'px'
+                    }, 400);
+            });
+            $('#hint').slideUp();
+            
+            $getInfo.find('span:last').hide();
+            $getInfo.find('span:first').show();
+        }
+         
+        if(direction === "down") {
+            var height = $('#hint').outerHeight(true);
+            $('div.polaroid').each(function(i) {
+                if(i > 0) {
+                    var move = i*height/2;
+                    $(this).animate({
+                        top: '-='+move
+                        }, 400);
+                }
+            });
+            $('#hint').slideDown();
+            $getInfo.find('span:first').hide();
+            $getInfo.find('span:last').show();
+            $getInfo.find('b:first').hide();
+            $getInfo.find('b:last').show();
+        }
     },
+    
+    /** displays the pictures of the question **/
     displayQuestion: function() {
         $('div.polaroid img').each(function(i) {
-            $(this).attr('src', Answers.city[Answers.currentPointer].images[i]);
+            $(this).attr('src', Answers.currentCity.images[i]);
         });
-        $('div.polaroid').each(function(i) {
-            var move = i*-20;
-            $(this).animate({
-                top: move+'px'
-                }, 600);
-        });
+        
+        this.picturesSlide("up");
+        
+        if($('#bonusQuestion').is(":visible")) {
+        $('#bonusQuestion').fadeOut('fast');
+        }
         if($('#getMorePics').is(":hidden")) {
-            $('#getMorePics').fadeIn();
+            $('#getMorePics').fadeIn('fast');
         }
         if($('#getInfo').is(":hidden")) {
-            $('#getInfo').fadeIn();
-        }
-        if($('#hint').is(":visible")) {
-            $('#hint').slideUp('slow');
+            $('#getInfo').fadeIn('fast');
         }
         
         $('#answer').hide();
         $('#progress').html("Question " + Game.questionNr + " out of 10:");
-        var height = $('#hint').outerHeight(true);
 
         
         if($('.polaroid').is(":hidden")) {
                 $('.polaroid').fadeIn();
         }
         $('div#map_canvas').unblock();
-
-
-            
-        },
+    },
+  
+   /** displays the answer screen **/
+   displayAnswer: function(result) {
+   	   //Game.setPoints();
+       
+       $('#navigation > a').hide();
+       $('#hint').hide();
+       $('.polaroid').hide();
+       $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
+       var answer = "<b>"+result[2] +" points!</b>" +
+   	                    "The correct answer is:<b>" + Answers.currentCity.name + "</b>" +
+   	                    "You missed it by " + result[0] + "km. <br>" +
+   	                    "That would mean a " + result[1] + " drive.";
+   	   $('#answerText').html(answer);
+       $('#answer').fadeIn('fast');
+       
+       this.writeResult();
+   },
+   
+   /** outputs the collected information to a file, database etc. **/
    writeResult: function() {
-       $.post("writeResult.php", { city: Answers.city[Answers.currentPointer]} );
+       $.post("writeResult.php", { city: Answers.currentCity } );
    }
 };
 
+/** Object for storing the answers **/
 var Answers = {
-    currentPointer: "",
-    city: [],
-    removeElement: function(i)   {
-        Answers.city.splice(i, 1);
-    },
+    currentCity: {},
+    cities: [],
     reset: function() {
-        this.city = [];
+        this.currentCity = {},
+        this.cities = [];
     }
 };
+var Bonus = {
+    obj : {
+        country: "",
+        flagUrl: ""
+    },
+    flags: []
+};
 
+/** Object for a city with its properties and reset method **/
 var City = function() {
     this.name = "";
     this.dbPediaUrl = "";
+    this.country = "";
     this.abstract = "";
     this.sights = [];
     this.images = [];
     this.reset = function() {
         this.name = "";
+        this.abstract = "";
+        this.country = "";
         this.dbPediaUrl = "";
         this.sights = [];
         this.images = [];
@@ -398,18 +457,12 @@ var City = function() {
 };
 
 /** Helper Functions **/
-function incCounter() {
-    var points = $('#points');
-		var currCount = parseInt(points.html());
-    points.text(currCount+7);
-    if (currCount+7 <= Game.pointsTotal) {
-        setTimeout('incCounter()',15);
-    }
-		else {
-			points.text(Game.pointsTotal);
-		}
+function random(from, to){
+       return Math.floor(Math.random() * (to - from + 1) + from);
 }
 
-function random(from, to){
-       return Math.round(Math.random() * (to - from + 1) + from);
-}
+$(function() {
+   
+   Game.init();
+   
+});

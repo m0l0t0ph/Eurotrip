@@ -2,6 +2,7 @@
 
 function getUrlDbpediaAbstract($term)
 {
+   $term = str_replace(" ", "_", $term);
    $format = 'json';
  
    $query = 
