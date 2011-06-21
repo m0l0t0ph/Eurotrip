@@ -4,6 +4,8 @@ var Game = {
     penaltyDistance: 1000,
     quesPerRound: 10,
     distanceBonusQuestion: 200,
+    hintPoints: -400,
+    morePicsPoints: -200,
     
     /** these control the flow of things **/
     pointsTotal: 0,
@@ -28,10 +30,10 @@ var Game = {
             
             if (Game.hasMorePics === false) {
                 Answers.currentCity.images = [];
-                Question.getPictures(false);
+                Question.displayQuestion(1);
                 $(this).block({ message: null });
                 Game.hasMorePics = true;
-                Game.calculatePoints(null, -200);
+                Game.calculatePoints(null, Game.morePicsPoints);
             }
         });
         
@@ -39,7 +41,7 @@ var Game = {
             event.preventDefault();
             Question.displayHint();
             if (Game.hasHint === false) {
-                Game.calculatePoints(null, -400);
+                Game.calculatePoints(null, Game.hintPoints);
                 Game.hasHint = true;
             }
         });
@@ -280,6 +282,9 @@ var Question = {
                 { city:         Answers.currentCity.name,
                   dbPediaUrl:   Answers.currentCity.dbPediaUrl 
                   }, function(data) {
+                      if(data === "") {
+                          $('#getHint').block({ message: null });
+                      }
                       Answers.currentCity.abstract = data;
                       console.log(Answers.currentCity.abstract);
         });
@@ -292,14 +297,28 @@ var Question = {
             location = Answers.currentCity;
         }
         console.log("bilder fuer " + location.name);
-        $.getJSON("getPictures.php", 
-        { locName: location.name,
-            dbPediaUrl: location.dbPediaUrl },
+        $.getJSON("getPictures2.php", 
+        { 'location': location.name },
             function(data) {
-                location.images.push(data.img_url1);
-                location.images.push(data.img_url2);
-                location.images.push(data.img_url3);
-                console.log(location.images);
+                var city = data.City;
+                location.photoCollection = city.PhotoCollection;
+                console.log(city);
+                $.each(city.Locations, function(key, value) {
+                    var tempSight = new Sight();
+                    tempSight.name = value.Name;
+                    tempSight.dbPediaUrl = value.URL;
+                    tempSight.photoCollection = value.PhotoCollection;
+                    $.each(value.PictureURLs[0], function(key, value) {
+                        tempSight.pictures.push(value);
+                    });
+                    $.each(value.PictureURLs[1], function(key, value) {
+                        tempSight.pictures.push(value);
+                    });
+                    
+                    location.sights.push(tempSight);
+                });
+                console.log(location.sights);
+                
                 if(!isPreload) {
                     Question.displayQuestion();
                 }
@@ -341,11 +360,11 @@ var Question = {
     evalBonusQuestion : function(country) {
         if(country === Answers.currentCity.country) {
             Game.calculatePoints(null, 100);
-            $('#bonusQuestion form').fadeOut('fast', function() {
+            $('#bonusQuestion').find('form').fadeOut('fast', function() {
                 $('#bonusCorrect').fadeIn('fast');
             });
         } else {
-            $('#bonusQuestion form').fadeOut('fast', function() {
+            $('#bonusQuestion').find('form').fadeOut('fast', function() {
                 $('#bonusWrong').fadeIn('fast');
             });
         }
@@ -415,15 +434,17 @@ var Question = {
     },
     
     /** displays the pictures of the question **/
-    displayQuestion: function() {
+    displayQuestion: function(batch) {
+        batch = typeof(batch) != 'undefined' ? batch : 0;
         if( $('#hint').is(':visible') ) {
             this.picturesSlide("up");
         }
         
-        $('div.polaroid img').each(function(i) {
-            $(this).attr('src', Answers.currentCity.images[i]);
+        $('.polaroid img').each(function(i) {
+            $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
         $('.polaroid').fadeOut('slow', function() {
+            
             $(this).fadeIn('slow');
         });
         
@@ -488,7 +509,7 @@ var City = function() {
     this.country = "";
     this.abstract = "";
     this.sights = [];
-    this.images = [];
+    this.photoCollection = "";
     this.reset = function() {
         this.name = "";
         this.dbPediaUrl = "";
@@ -496,8 +517,15 @@ var City = function() {
         this.abstract = "";
         this.dbPediaUrl = "";
         this.sights = [];
-        this.images = [];
+        this.photoCollection = "";
     }
+};
+
+var Sight = function() {
+    this.name = "";
+    this.dbPediaUrl = "";
+    this.photoCollection = "";
+    this.pictures = [];
 };
 
 /** Helper Function **/

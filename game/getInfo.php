@@ -9,6 +9,10 @@ else {
     $term = 'Berlin';
 }
 
+//Abfangen von Sonderfällen (Notwendig da dbPediaendung nur Frankfurt)
+if ($term == "Frankfurt am Main") {
+		$term = "Frankfurt";
+}
 
 // Query nach DPpedia
 function getUrlDbpediaAbstract($term)
@@ -57,6 +61,7 @@ function request($url){
 }
 
 // Aufruf, String-Anpassung und Rückgabe
+$term = str_replace(" ","_",$term);
 
 $requestURL = getUrlDbpediaAbstract($term);
 
@@ -67,6 +72,11 @@ $responseArray = json_decode(request($requestURL),true);
   
   $AbstractString = str_replace($term, "XXX", $AbstractString);
   $AbstractString = "...".substr($AbstractString, 50, 250 )."..."; // Position kann entsprechend im testing optimiert werden
+  
+  //leere "abstract" abfangen  
+  if ($AbstractString == "......") {
+  		$AbstractString = "";
+  }
   
   echo json_encode($AbstractString);
   

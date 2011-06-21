@@ -35,3 +35,4 @@ game/publish/js/scripts-0004.min.js
 game/publish/results.txt
 game/publish/writeResult.php
 game/htaccess
+game/js/script_save.js
