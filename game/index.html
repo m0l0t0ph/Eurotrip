@@ -42,9 +42,13 @@
             <div id="bonusQuestion">
                 <h2>Bonus Question</h2>
                 <h3>Pick the corresponding flag!</h3>
-                <a href="#"><img src="#" alt="Picture"></a>
-                <a href="#"><img src="#" alt="Picture"></a>
-                <a href="#"><img src="#" alt="Picture"></a>
+                <form>
+                    <label><input type="radio" name="country" value=""><img src="#" alt="Picture"></label>
+                    <label><input type="radio" name="country" value=""><img src="#" alt="Picture"></label>
+                    <label><input type="radio" name="country" value=""><img src="#" alt="Picture"></label>
+                </form>
+                <b id="bonusCorrect">That was correct! +100pts</b>
+                <b id="bonusWrong">Sorry, but you were wrong :(</b>
             </div>
             <a class="button" href="#">Next Question</a>
         </div>

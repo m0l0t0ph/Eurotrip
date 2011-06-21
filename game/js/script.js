@@ -3,7 +3,7 @@ var Game = {
     startQuesPts: 1000,
     penaltyDistance: 1000,
     quesPerRound: 10,
-    distanceBonusQuestion: 100,
+    distanceBonusQuestion: 500,
     
     /** these control the flow of things **/
     pointsTotal: 0,
@@ -191,9 +191,7 @@ var Map = {
                 ergebnisArray[2] = Game.calculatePoints(ergebnisArray[0], null);
                 
                 Question.displayAnswer(ergebnisArray);
-                if (ergebnisArray[0] <= Game.distanceBonusQuestion) {
-                    Question.displayBonusQuestion();
-                }
+                
             }
     	});
     },
@@ -239,8 +237,10 @@ var Question = {
         Game.setQuestionNr();
         Answers.bonus = [];
         
-        $('#bonusQuestion').hide();
+        
         $('#answer').fadeOut();
+        $('#bonusQuestion').fadeOut();
+        
         
         var $getInfo = $('#getInfo');
         $getInfo.find('b:last').hide();
@@ -306,9 +306,9 @@ var Question = {
         });
     },
     
+    /** gets the data for the Bonus Question (flags of 3 different countries) **/
     getBonusQuestion: function() {
-        var Bonus = [],
-            countries = [],
+        var countries = [],
             ran = 0,
             citiesLength = Answers.countries.length;
         
@@ -317,7 +317,8 @@ var Question = {
         for(var i = 0; countries.length < 3; i += 1) {
             ran = Math.floor(Math.random()*citiesLength);
             
-            if($.inArray(Answers.countries[ran], countries) === -1) {
+            /** no duplicates and avoid UK since the link is wrong in DBpedia **/
+            if($.inArray(Answers.countries[ran], countries) === -1 && Answers.countries[ran] !== "United Kingdom") {
                 countries.push(Answers.countries[ran]);
             }
         }
@@ -336,21 +337,34 @@ var Question = {
         });
     },
     
+    /** checks if the given answer was correct **/
     evalBonusQuestion : function(country) {
-        if(country == Answers.currentCity.country) {
+        if(country === Answers.currentCity.country) {
             Game.calculatePoints(null, 100);
+            $('#bonusQuestion form').fadeOut('fast', function() {
+                $('#bonusCorrect').fadeIn('fast');
+            });
+        } else {
+            $('#bonusQuestion form').fadeOut('fast', function() {
+                $('#bonusWrong').fadeIn('fast');
+            });
         }
-        //$('#bonusQuestion').fadeOut('slow');
-        //Question.generate();
     },
     
+    /** displays the Bonus Question **/
     displayBonusQuestion: function() {
-        $('#bonusQuestion a').each(function(i) {
-            $(this).click(function(event) {
-                event.preventDefault();
-                Question.evalBonusQuestion(Answers.bonus[i].name);
-            });    
+        /** reset visibility **/
+        $('#bonusQuestion b').hide();
+        $('#bonusQuestion form').show();
+        
+        $('#bonusQuestion label').each(function(i) {
+            $(this).find('input').attr('value', Answers.bonus[i].name);
             $(this).find('img').attr('src', Answers.bonus[i].flag);
+            $(this).find('input').click(function(event) {
+                event.preventDefault();
+                var country = $(this).val();
+                Question.evalBonusQuestion(country);
+            });
         });
         $('#bonusQuestion').show();
     },
@@ -432,6 +446,11 @@ var Question = {
    	                    "That would mean a " + result[1] + " drive.";
    	   $('#answerText').html(answer);
    	   
+   	   /** display Bonus Question if player was close enough **/
+   	   if (result[0] <= Game.distanceBonusQuestion) {
+           this.displayBonusQuestion();
+       }
+       
    	   left = (windowWidth - $('#answer').outerWidth())/2;
    	   top = (windowHeight - $('#answer').outerHeight())/2;
        $('#answer').css({ 
