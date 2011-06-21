@@ -109,8 +109,8 @@ $.blockUI.defaults = {
 
 	// styles for the overlay
 	overlayCSS:  {
-		backgroundColor: '#000',
-		opacity:	  	 0.7
+		backgroundColor: '#292929',
+		opacity:	  	 0.75
 	},
 
 	// styles applied when using $.growlUI
