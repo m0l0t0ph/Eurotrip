@@ -3,7 +3,7 @@ var Game = {
     startQuesPts: 1000,
     penaltyDistance: 1000,
     quesPerRound: 10,
-    distanceBonusQuestion: 500,
+    distanceBonusQuestion: 200,
     
     /** these control the flow of things **/
     pointsTotal: 0,
