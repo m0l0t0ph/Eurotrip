@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2011.6.24)  28 JUN 2011 16:36
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2011.6.24)  28 JUN 2011 21:46
 entering extended mode
 **L:/Daten/Studium/4_Semester/Seminar*Linked*Open*Data/Eurotrip/dokumentation/e
 urotrip_doku.tex
@@ -295,42 +295,54 @@ File: pdftex.def 2011/01/28 v0.05d Graphics/color for pdfTeX
 \Gin@req@height=\dimen104
 \Gin@req@width=\dimen105
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\float\float.sty"
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count89
+\float@exts=\toks17
+\float@box=\box26
+\@float@everytoks=\toks18
+\@floatcapt=\box27
+)
 ("L:\Daten\Studium\4_Semester\Seminar Linked Open Data\Eurotrip\dokumentation\e
-urotrip_doku.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 12.
-LaTeX Font Info:    ... okay on input line 12.
+urotrip_doku.aux"
+
+LaTeX Warning: Label `img:grafik-dummy' multiply defined.
+
+)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
+LaTeX Font Info:    ... okay on input line 13.
  ("C:\Program Files\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count89
+\scratchcounter=\count90
 \scratchdimen=\dimen106
-\scratchbox=\box26
-\nofMPsegments=\count90
-\nofMParguments=\count91
-\everyMPshowfont=\toks17
-\MPscratchCnt=\count92
+\scratchbox=\box28
+\nofMPsegments=\count91
+\nofMParguments=\count92
+\everyMPshowfont=\toks19
+\MPscratchCnt=\count93
 \MPscratchDim=\dimen107
-\MPnumerator=\count93
-\makeMPintoPDFobject=\count94
-\everyMPtoPDFconversion=\toks18
+\MPnumerator=\count94
+\makeMPintoPDFobject=\count95
+\everyMPtoPDFconversion=\toks20
 )
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <10.95> on input line 56.
+(Font)              <10.95> on input line 57.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 56.
+(Font)              <8> on input line 57.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 56.
+(Font)              <6> on input line 57.
 
-Overfull \hbox (6.28667pt too wide) in paragraph at lines 56--72
+Overfull \hbox (6.28667pt too wide) in paragraph at lines 57--73
 []  
  []
 
@@ -344,92 +356,137 @@ urotrip_doku.toc")
 ("L:\Daten\Studium\4_Semester\Seminar Linked Open Data\Eurotrip\dokumentation\e
 urotrip_doku.lof")
 \tf@lof=\write4
- [2] [1]
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 92.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 92.
-
-Underfull \hbox (badness 10000) in paragraph at lines 92--93
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 89--92
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 92--93
+Underfull \hbox (badness 10000) in paragraph at lines 89--92
 
  []
 
 
-Overfull \hbox (2.38455pt too wide) in paragraph at lines 92--93
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--97
+
+ []
+
+[1]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 100.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 100.
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--102
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--102
+
+ []
+
+
+Overfull \hbox (2.38455pt too wide) in paragraph at lines 100--102
 \OT1/cmr/m/n/10.95 Als An-bie-ter der Soft-wa-re ist ne-ben der Schaf-fung ei-n
 er Ein-nah-mem[]oglichkeit
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 103--105
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 94--95
+Underfull \hbox (badness 10000) in paragraph at lines 103--105
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 96--97
+Underfull \hbox (badness 10000) in paragraph at lines 106--108
 
  []
 
-[2] [3] [4] <seminarLOD.png, id=33, 3067.93236pt x 2338.14706pt>
+[2] [3] <projektplanung_organigramm_sw.png, id=29, 1236.62pt x 780.9175pt>
+File: projektplanung_organigramm_sw.png Graphic file (type png)
+
+<use projektplanung_organigramm_sw.png>
+Underfull \hbox (badness 10000) in paragraph at lines 112--119
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--124
+
+ []
+
+
+Overfull \hbox (2.59747pt too wide) in paragraph at lines 122--124
+\OT1/cmr/m/n/10.95 Die Un-aus-ge-gli-chen-heit der Pro-jek-t-auf-ga-ben auf-gru
+nd un-ter-schied-li-cher Aus-
+ []
+
+[4 <L:/Daten/Studium/4_Semester/Seminar Linked Open Data/Eurotrip/dokumentation
+/projektplanung_organigramm_sw.png>] [5]
+<seminarLOD.png, id=39, 3067.93236pt x 2338.14706pt>
 File: seminarLOD.png Graphic file (type png)
+ <use seminarLOD.png>
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 136.
 
-<use seminarLOD.png>
-Overfull \hbox (24.1008pt too wide) in paragraph at lines 108--109
- [][] 
- []
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 116.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
-
-Underfull \hbox (badness 10000) in paragraph at lines 126--127
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 128--129
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 136.
+ [6 <L:/Daten/Studium/4_Semester/Seminar Linked Open Data/Eurotrip/dokumentatio
+n/seminarLOD.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 146--148
 
  []
 
-[5] [6 <L:/Daten/Studium/4_Semester/Seminar Linked Open Data/Eurotrip/dokumenta
-tion/seminarLOD.png>] [7] [8]
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--152
+
+ []
+
+[7] [8] [9]
 ("L:\Daten\Studium\4_Semester\Seminar Linked Open Data\Eurotrip\dokumentation\e
-urotrip_doku.aux") ) 
+urotrip_doku.aux")
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 1569 strings out of 494053
- 19785 string characters out of 3148606
- 77232 words of memory out of 3000000
- 4865 multiletter control sequences out of 15000+200000
+ 1634 strings out of 494053
+ 20739 string characters out of 3148606
+ 78439 words of memory out of 3000000
+ 4925 multiletter control sequences out of 15000+200000
  9945 words of font info for 35 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 25i,8n,24p,1308b,232s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.
-pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
-blic/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
-msy10.pfb>
-Output written on eurotrip_doku.pdf (11 pages, 312111 bytes).
+ 25i,8n,24p,1150b,230s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+mr9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsl10.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on eurotrip_doku.pdf (12 pages, 355337 bytes).
 PDF statistics:
- 81 PDF objects out of 1000 (max. 8388607)
+ 86 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
