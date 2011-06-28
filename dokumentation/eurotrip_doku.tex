@@ -111,12 +111,19 @@ Die grundlegende Spielidee wurde so schon in Facebook- sowie iPhone-Apps impleme
 \end{figure}
 
 \subsection{Verwendete LOD-Datensätze}
-
+Die verwendeten LOD-Datensätze sind:
+\begin{itemize}
+\item \textbf{Geonames}
+\item \textbf{DBpedia}
+\item \textbf{Freebase}
+\item \textbf{Flickrwrappr}
+\item \textbf{Weitere (Bonusfrage)}
+\end{itemize}
 \subsection{Verwendete Technologien und Frameworks}
-Neben dem Linked-Open-Data Ansatzes des Semantic Webs
+Neben dem Linked-Open-Data Ansatzes des Semantic Webs benutzt das Programm selbst noch weitere Frameworks.
 \subsection{Dokumentation der Methoden und Funktionen}
 \subsection{Stabilität und Verfügbarkeit}
-Das Programm an sich läuft trotz seines Prototypen-Status recht stabil. Allerdings ist die Erreichbarkeit von drei Datenquellen für den grundlegenden Ablauf der Fragerunden zwingend erforderlich. Diese sind Geonames, die DBpedia sowie der Flickrwrappr. Ein Ausfall der Freebase würde lediglich die Qualität der Bilder senken, da dann das Heraussuchen von Touristischen Attraktionen wegfallen würde. Sollte einer der Datenbanken der Bonusfragen nicht antworten, wäre ein Fallback auf eine andere Bonusfrage oder das komplette Deaktivieren denkbar. Bei beiden Möglichkeiten ist weiterhin ein stabiler, wenn auch eingeschränkter Betrieb des Programms möglich.\\\\
+Das Programm an sich läuft trotz seines Prototypen-Status recht stabil. Allerdings ist die Erreichbarkeit von drei Datenquellen für den grundlegenden Ablauf der Fragerunden zwingend erforderlich. Diese sind Geonames, die DBpedia sowie der Flickrwrappr. Ein Ausfall der Freebase würde lediglich die Qualität der Bilder senken, da dann das Heraussuchen von Touristischen Attraktionen wegfallen würde. Sollte einer der Datenbanken der Bonusfragen nicht antworten, wäre ein Fallback auf eine andere Bonusfrage oder das komplette Deaktivieren denkbar. Bei beiden Möglichkeiten ist weiterhin ein stabiler, wenn auch eingeschränkter Betrieb des Programms möglich.\\\\ // Hier noch etwas zur Verfügbarkeit der einzelnen Datenquellen
 \subsection{Installation und Betrieb}
 Das Spiel selbst benötigt keine clientseitige Installation. Einzig ein funktionierender, aktueller Browser, der in der Lage ist Javascript auszuführen, ist von Nöten. Der Start erfolgt durch Ansteuerung der Webadresse.\\\\Für den Betrieb des Spiels ist der Anbieter des Porgramms allerdings gezwungen einen Webserver zu betreiben. Dieser muss in der Lage sein PHP-Code zu interpretieren und so die nötigen Abfragen auf die verschiedenen Datenquellen auszuführen.
 \newpage

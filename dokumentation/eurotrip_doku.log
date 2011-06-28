@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2011.6.24)  28 JUN 2011 16:11
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2011.6.24)  28 JUN 2011 16:36
 entering extended mode
 **L:/Daten/Studium/4_Semester/Seminar*Linked*Open*Data/Eurotrip/dokumentation/e
 urotrip_doku.tex
@@ -388,18 +388,20 @@ Overfull \hbox (24.1008pt too wide) in paragraph at lines 108--109
  [][] 
  []
 
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 116.
 
-Underfull \hbox (badness 10000) in paragraph at lines 119--120
+("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 116.
+
+Underfull \hbox (badness 10000) in paragraph at lines 126--127
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 119--120
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 121--122
+Underfull \hbox (badness 10000) in paragraph at lines 128--129
 
  []
 
@@ -408,10 +410,10 @@ tion/seminarLOD.png>] [7] [8]
 ("L:\Daten\Studium\4_Semester\Seminar Linked Open Data\Eurotrip\dokumentation\e
 urotrip_doku.aux") ) 
 Here is how much of TeX's memory you used:
- 1552 strings out of 494053
- 19494 string characters out of 3148606
+ 1569 strings out of 494053
+ 19785 string characters out of 3148606
  77232 words of memory out of 3000000
- 4851 multiletter control sequences out of 15000+200000
+ 4865 multiletter control sequences out of 15000+200000
  9945 words of font info for 35 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  25i,8n,24p,1308b,232s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -423,10 +425,11 @@ les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTe
 X 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/font
 s/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pu
 blic/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
-nts/cm/cmsl10.pfb>
-Output written on eurotrip_doku.pdf (11 pages, 303133 bytes).
+nts/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+msy10.pfb>
+Output written on eurotrip_doku.pdf (11 pages, 312111 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
+ 81 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
