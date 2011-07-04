@@ -126,26 +126,56 @@ Die Unausgeglichenheit der Projektaufgaben aufgrund unterschiedlicher Ausgangspo
 \subsection{Schematischer Aufbau, Konzeptskizze}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\columnwidth, angle=0]{seminarLOD.png}
+	\includegraphics[width=0.5\columnwidth, angle=0]{seminarLOD.png}
 	\caption{Konzeptskizze // VERALTET}
 	\label{img:grafik-dummy}
 \end{figure}
+Konzeptionell baut das Programm auf einer zentrierten Struktur auf.
 \subsection{Verwendete LOD-Datensätze}
 Die verwendeten LOD-Datensätze sind:
 \begin{itemize}
-\item \textbf{Geonames} wird benutzt, um eine Auswahl an Städten zu erzeugen, die der Spieler später dann lokalisieren muss. Diese Datenquelle wurde gegenüber der DBpedia bevorzugt, da bei ihr die Städte klarer strukturiert abgespeichert sind. So fällt die Abfrage der Städte leichter.
-\item Die \textbf{DBpedia} wird gleich an mehreren Stellen im Programm verwendet.
-\item \textbf{Freebase}
-\item \textbf{Flickrwrappr}
-\item \textbf{Weitere (Bonusfrage)}
+\item \textbf{Geonames} wird eingesetzt, um eine Auswahl an Städten zu erzeugen, die der Spieler später dann lokalisieren muss. Diese Datenquelle wurde gegenüber der DBpedia bevorzugt, da bei ihr die Städte klarer strukturiert abgespeichert sind. So fällt die Abfrage der Städte und die Länder in denen diese liegen leichter.
+\item Die \textbf{DBpedia} wird gleich an mehreren Stellen im Programm verwendet. Grundsätzlich gilt, dass wenn Namen von Städten, Ländern oder Sehenswürdigkeiten zwischen verschiedenen Programmteilen getauscht werden, dass diese dann mit ihrem DBpedia URI übergeben werden müssen, um valide zu sein. Somit hat man eine gemeinsame Basis, auf der man kommuniziert. Weiterhin werden sowohl der Kurzhinweis als auch die existierende Bonusfrage mit Hilfe der DBpedia generiert. Auch wird dort mit dem dafür zuständigen Tag geprüft, ob eine Sehenswürdigkeit oder Stadt wirklich eine FlickrWrappry-FotoCollection besitzt.
+\item \textbf{Freebase} dient vor Allem der Optimierung der Foto-Suchergebnisse. Da sich rein mit einer Stadt getaggte Bilder als teilweise ungenügend herausgestellt haben, wird die Freebase zunächst nach bekannten touristischen Sehenswürdigkeiten der einzelnen Städte abgefragt, da diese i.d.R. bessere Suchergebnisse liefern.
+\item Der \textbf{Flickrwrappr} basiert auf einem PHP-Skript der FU Berlin. Man übergibt diesem Skript als Übergabeparameter einen Stadt- oder Sehenswürdigkeitsnamen, welcher dem URI der DBpedia entsprechen sollte. Der Flickrwrappr wiederum antwortet mit Links zu bei Flickr geogetaggten Fotografien als strukturierte Daten in Form einer XML/RDF, die wir wiederum einlesen und verarbeiten.
+\item Im Zuge der Bonusfrage können außerdem noch \textbf{weitere Datensätze} in das bestehende Programm integriert werden. Solange diese die gleiche Schnittstelle wie die existierende Bonusfrage benutzen, können sie ohne weitere Probleme in das Programm integriert werden.
 \end{itemize}
 \subsection{Verwendete Technologien und Frameworks}
-Neben dem Linked-Open-Data Ansatzes des Semantic Webs benutzt das Programm selbst noch weitere Frameworks.
+Neben dem Linked-Open-Data Ansatzes des Semantic Webs benutzt das Programm selbst noch weitere Technologien und Frameworks.\\\\
+Die verwendeten Technologien sind dabei hauptsächlich Javascript für die eigentliche Engine und PHP für die Abfrageklassen. Zur Kommunikation unterhalb dieser Programmteile wird auf AJAX sowie JSON gesetzt. Serverseitig kommt bei uns ein Apache-Server zum Einsatz.\footnote{Einfach mal geraten - NACHPRÜFEN!} Desweiteren wird die gesamte Webseite natürlich in HTML eingebettet und in einem aktuellen Browser über das Internet ausgeführt.\\\\
+Als Framework wird vor Allem die "Google Maps API"\footnote{Verlinkung/Quelle} eingesetzt. Sie liefert uns das Kartenmaterial, dessen Anzeige sowie die Abwicklung der Interaktion des Spielers mit ebenjener. Auch die Routenberechnung läuft über dieses Framework.\footnote{Haben wir noch weitere Frameworks im Einsatz?}
 \subsection{Dokumentation der Methoden und Funktionen}
+\begin{tabular}{|p{3.5cm}|}
+\hline
+\textsc{getCity.php}
+\end{tabular}
+\\
+\begin{tabular}{|p{2.8cm}|p{2.8cm}|p{5.8cm}|}
+\hline
+\textsc{Input} & \textsc{Output} & \textsc{Beschreibung}\\
+\hline
+ - & Array mit: \newline - Stadtname\newline - DBpedia-URI\newline - Land\newline pro Eintrag & Durchsucht Geonames mit gewissen Filterkriterien nach Städten. So wird nach europäischen Städten mit mehr als 400000 Einwohnern gesucht\footnote{Für Deutschland wird dieser Filter auf 250000 abgesenkt}, die nicht in Russland oder der Ukraine liegen.\\
+\hline
+\end{tabular}
+\begin{tabular}{|p{3.5cm}|}
+\hline
+\textsc{getPictures.php}
+\end{tabular}
+\\
+\begin{tabular}{|p{2.8cm}|p{2.8cm}|p{5.8cm}|}
+\hline
+\textsc{Input} & \textsc{Output} & \textsc{Beschreibung}\\
+\hline
+ - & Array mit: \newline - Stadtname\newline - DBpedia-URI\newline - Land\newline pro Eintrag & Durchsucht Geonames mit gewissen Filterkriterien nach Städten. So wird nach europäischen Städten mit mehr als 400000 Einwohnern gesucht\footnote{Für Deutschland wird dieser Filter auf 250000 abgesenkt}, die nicht in Russland oder der Ukraine liegen.\\
+\hline
+\end{tabular}
 \subsection{Stabilität und Verfügbarkeit}
 Das Programm an sich läuft trotz seines Prototypen-Status recht stabil. Allerdings ist die Erreichbarkeit von drei Datenquellen für den grundlegenden Ablauf der Fragerunden zwingend erforderlich. Diese sind Geonames, die DBpedia sowie der Flickrwrappr. Ein Ausfall der Freebase würde lediglich die Qualität der Bilder senken, da dann das Heraussuchen von Touristischen Attraktionen wegfallen würde. Sollte einer der Datenbanken der Bonusfragen nicht antworten, wäre ein Fallback auf eine andere Bonusfrage oder das komplette Deaktivieren denkbar. Bei beiden Möglichkeiten ist weiterhin ein stabiler, wenn auch eingeschränkter Betrieb des Programms möglich.\\\\ 
 // Hier noch etwas zur Verfügbarkeit der einzelnen Datenquellen
 \subsection{Generierung strukturierter Datensätze}
+Ein weiterer technischer Aspekt ist die Generierung eigener strukturierter Daten. Dies ist einer der Grundgedanken sowohl des Semantic Webs als auch des Semantic Gamings. Unser Programm ist dabei in der Lage schon rudimentär neu von uns verknüpfte Daten in Kombination mit Daten, die wir durch die Eingabe der Nutzer gewonnen haben, als strukturierte Daten abzuspeichern. Dabei wird für jede Stadt jeweils ein XML-Datensatz angelegt, der dann befüllt wird mit den aktuellen Sehenswürdigkeiten, Bildlinks sowie der vom Nutzer bei genau dieser Kombination erreichten Entfernung zum Zielort.\\\\ Dadurch erschaffen wir eine Datenbank aus der man durch geschicktes Abfragen z.B. mit XPath eine ganz neue Qualität an Information ziehen kann. So sind wir in der Lage bei ausreichend großen Nutzerdateninput durch gemittelte Entfernungen Aussagen über den Bekanntheitsgrad von Städten im Allgemeinen, aber auch deren Sehenswürdigkeiten zu treffen. Denkbar wäre z.B. auch das Blacklisting einzelner Bildlinks als schlechte Fotografien, die eine signifikante Abweichung zu anderen Bildlinks der gleichen Sehenswürdigkeit etc. aufweisen.\\\\
+Wir sind damit in der Lage das bei LOD grundlegend heikle Thema der Bewertung von Elementen innerhalb einer Cloud zu verbessern, da man nun mit der Entfernung zumindestens ein Maß für die Bekanntheit dieser Städte uns Sehenswürdigkeiten besitzt.\\\\
+Zusammenfassend ist zu sagen, dass die Datensätze so wie wir sie im Moment abspeichern exakt dem entsprechen, was wir zu Beginn der Arbeiten eigentlich als Datenbank gebraucht hätten. Dies dürfte jedoch dem Grundgedanken des Semantic Webs entsprechen, da dieses seine Mächtigkeit ja gerade durch die nahezu unendliche Möglichkeit der Kombination und Verknüpfung von bestehenden und das Einpflegen von neuen strukturierten Daten bezieht.
 \subsection{Installation und Betrieb}
 Das Spiel selbst benötigt keine clientseitige Installation. Einzig ein funktionierender, aktueller Browser, der in der Lage ist Javascript auszuführen, ist von Nöten. Der Start erfolgt durch Ansteuerung der Webadresse.\\\\
 Für den Betrieb des Spiels ist der Anbieter des Porgramms allerdings gezwungen einen Webserver zu betreiben. Dieser muss in der Lage sein PHP-Code zu interpretieren und so die nötigen Abfragen auf die verschiedenen Datenquellen auszuführen.
