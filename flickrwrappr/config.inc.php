@@ -1,6 +1,6 @@
 <?php
 
-define('RDFAPI_INCLUDE_DIR','C:/!htdocs/flickrwrappr/rdfapi-php/api/');
+define('RDFAPI_INCLUDE_DIR','rdfapi-php/api/');
 
 define("DBPEDIA_URI_ROOT", "http://dbpedia.org/resource/");
 
@@ -16,7 +16,7 @@ define("FLICKR_TOS_URL", "http://www.flickr.com/terms.gne");
 define("SPARQL_ENDPOINT_URL", "http://dbpedia.org/sparql");
 define("SPARQL_GRAPH_URI", "http://dbpedia.org");
 
-define("FLICKR_API_KEY", "");
+define("FLICKR_API_KEY", "ef47d0a4095a6ac8778c33fff9e93810");
 
 /**
  * Only return images that are licensed under CC-BY, CC-NC, CC-NC-SA or CC-SA and may thus be used for derivative works
