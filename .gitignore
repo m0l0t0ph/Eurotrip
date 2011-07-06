@@ -36,3 +36,9 @@ game/publish/results.txt
 game/publish/writeResult.php
 game/htaccess
 game/js/script_save.js
+game/publish/css/style-0003.css
+game/publish/css/style-0003.min.css
+game/publish/getPictures2.php
+game/publish/htaccess
+game/publish/js/script_save.js
+game/publish/js/scripts-0003.min.js

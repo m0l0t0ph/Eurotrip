@@ -119,10 +119,19 @@ H3 { margin: 0px 0px 5px 0px; font-size: 123.1% ;}
 #hint { display: none; padding: 0px 15px; margin-bottom: 20px; }
 #hintText { font-size: 108%; text-shadow: 1px 1px 1px black; }
 
-#answer { display: none; position: absolute; width: 400px; z-index: 1001; padding: 15px;
+.dialog { display: none; position: absolute; width: 400px; z-index: 1001; padding: 15px;
           -moz-border-radius: 10px; -webkit-border-radius: 10px;
           border-radius: 10px; }
-#answerText { text-align: center; font-size: 108%; margin-bottom: 10px;}
+          
+#welcome { text-align: center; font-size: 108%; }
+#welcome p { margin-bottom: 1em; }
+#welcome footer { font-size: 77%; color: #888; }
+
+#endOfRound { text-align: center; font-size: 108%; }
+#endOfRound p { margin-bottom: 1em; }
+#endOfRound B { color: #408000; font-size: 153.9%; font-weight: bold; margin: 10px; }
+
+#answerText { text-align: center; font-size: 108%; margin-bottom: 10px; }
 #answer B { color: #408000; font-size: 153.9%; font-weight: bold; margin: 10px; }
 #answer A { display: block; margin: 0 auto; margin-top: 5px; }
 

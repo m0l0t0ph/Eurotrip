@@ -54,7 +54,8 @@ for($i=0; count($location) < 10; $i++) {
     //Keine Duplikate
     array_splice($result, $ran, 1);
     
-    if($dbPedia AND $cityName != "Sarajevo") {
+    // Blacklist für "kaputte" Städte
+    if($dbPedia AND $cityName != "Sarajevo" AND $cityName != "Szczecin") {
            $city[0] = $cityName;
            $city[1] = $dbPedia;
            $city[2] = $country;

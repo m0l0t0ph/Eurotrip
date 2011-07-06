@@ -6,6 +6,7 @@ var Game = {
     distanceBonusQuestion: 200,
     hintPoints: -400,
     morePicsPoints: -200,
+    bonusPoints: 100,
     
     /** these control the flow of things **/
     pointsTotal: 0,
@@ -15,16 +16,20 @@ var Game = {
     
     /** Set up the game for the first time **/
     init: function() {
+        
         Question.getCities();
         Map.load();
+        
+        $.blockUI.defaults.css = {};
+        
+        
+        this.displayDialog($('#welcome'));
         
         var $getInfo = $('#getInfo');
         $getInfo.find('span:last').hide();
         $getInfo.find('b:last').hide();
         
-        /** bind appropriate function to buttons **/
-        $.blockUI.defaults.css = {};
-        $('div#map_canvas').block({ message: null, overlayCSS: { opacity: 0} });
+        /** bind appropriate functions to buttons **/
         $('#getMorePics').click(function(event) {
             event.preventDefault();
             
@@ -50,13 +55,25 @@ var Game = {
             event.preventDefault();
             Question.generate();
         });
+        $('#startGame').click(function(event) {
+            event.preventDefault();
+            $('div#map_canvas').unblock();
+            $('#welcome').fadeOut();
+        });
+        $('#newRound').click(function(event) {
+            event.preventDefault();
+            Game.newRound();
+            $('#endOfRound').fadeOut();
+        });
     },
     setQuestionNr: function() {
         if(this.questionNr < this.quesPerRound) {
             this.questionNr++;
             
         } else {
-            this.newRound();
+            var $endRound = $('#endOfRound');
+            $endRound.find('b').html(this.pointsTotal + " Points");
+            this.displayDialog($endRound);
         }
             
     },
@@ -95,6 +112,20 @@ var Game = {
         } else {
     		points.text(this.pointsTotal);
     	}**/
+    },
+    displayDialog: function($element) {
+        var windowWidth = window.innerWidth,
+               windowHeight = window.innerHeight,
+               left = "",
+               top = "";
+
+        $('#map_canvas').block({ message: null, overlayCSS: { opacity: 0.4} });
+        left = (windowWidth - $element.outerWidth())/2;
+        top = (windowHeight - $element.outerHeight())/2;
+        $element.css({ 
+            "left": left+"px",
+            "top": top+"px"})
+            .show();
     }
 };
 
@@ -239,10 +270,8 @@ var Question = {
         Game.setQuestionNr();
         Answers.bonus = [];
         
-        
         $('#answer').fadeOut();
         $('#bonusQuestion').fadeOut();
-        
         
         var $getInfo = $('#getInfo');
         $getInfo.find('b:last').hide();
@@ -296,7 +325,9 @@ var Question = {
         if (!isPreload || Answers.cities.length == 0) {
             location = Answers.currentCity;
         }
+        
         console.log("bilder fuer " + location.name);
+        /* uncomment when this works again
         $.getJSON("getPictures2.php", 
         { 'location': location.name },
             function(data) {
@@ -323,6 +354,12 @@ var Question = {
                     Question.displayQuestion();
                 }
         });
+        */
+        
+        //delete when pictures work again
+        if(!isPreload) {
+            Question.displayQuestion();
+        }
     },
     
     /** gets the data for the Bonus Question (flags of 3 different countries) **/
@@ -359,7 +396,7 @@ var Question = {
     /** checks if the given answer was correct **/
     evalBonusQuestion : function(country) {
         if(country === Answers.currentCity.country) {
-            Game.calculatePoints(null, 100);
+            Game.calculatePoints(null, Game.bonusPoints);
             $('#bonusQuestion').find('form').fadeOut('fast', function() {
                 $('#bonusCorrect').fadeIn('fast');
             });
@@ -436,49 +473,41 @@ var Question = {
     /** displays the pictures of the question **/
     displayQuestion: function(batch) {
         batch = typeof(batch) != 'undefined' ? batch : 0;
+        
         if( $('#hint').is(':visible') ) {
             this.picturesSlide("up");
         }
         
+        /** uncomment when getPictures is back up
         $('.polaroid img').each(function(i) {
             $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
+        **/
+        
         $('.polaroid').fadeOut('slow', function() {
-            
             $(this).fadeIn('slow');
         });
         
         $('#progress').html("Question " + Game.questionNr + " out of 10:");
 
-        $('div#map_canvas').unblock();
     },
   
    /** displays the answer screen **/
    displayAnswer: function(result) {
-   	   var windowWidth = window.innerWidth,
-           windowHeight = window.innerHeight,
-           left = "",
-           top = "";
-       
-       $('#map_canvas').block({ message: null, overlayCSS: { opacity: 0.4} });
+   	   var $answer = $('#answer');
+           
        var answer = "<b>"+result[2] +" points!</b>" +
    	                    "The correct answer is:<b>" + Answers.currentCity.name + "</b>" +
    	                    "You missed it by " + result[0] + "km. <br>" +
    	                    "That would mean a " + result[1] + " drive.";
-   	   $('#answerText').html(answer);
+   	   $answer.find('#answerText').html(answer);
    	   
    	   /** display Bonus Question if player was close enough **/
    	   if (result[0] <= Game.distanceBonusQuestion) {
            this.displayBonusQuestion();
        }
        
-   	   left = (windowWidth - $('#answer').outerWidth())/2;
-   	   top = (windowHeight - $('#answer').outerHeight())/2;
-       $('#answer').css({ 
-           "left": left+"px",
-           "top": top+"px"})
-           .fadeIn();
-       
+       Game.displayDialog($answer);
        this.writeResult();
    },
    
@@ -506,10 +535,10 @@ var Answers = {
 var City = function() {
     this.name = "";
     this.dbPediaUrl = "";
+    this.photoCollection = "";
     this.country = "";
     this.abstract = "";
     this.sights = [];
-    this.photoCollection = "";
     this.reset = function() {
         this.name = "";
         this.dbPediaUrl = "";
