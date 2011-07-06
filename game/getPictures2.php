@@ -11,6 +11,8 @@
  *
 */ 
 
+define('HOMEPAGE_URL',str_replace("getPictures2.php","","http://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']));
+
 /* Definition der Uebergabeparameter:
  * location[Default:Berlin], limit[Default:15], debugmode[Default:false]
  *
@@ -219,12 +221,18 @@ $endtime2 = microtime(true);
 ////////////////////////////////////////// Umformatieren zu UTF8 /////////////////////////////////////////
 
 $starttime3 = microtime(true);
+
 for ($i = 0; $i < $limit; $i++) {
-	$location_name=$mql_array['result'][$i]['key'][0]['value'];
-	if($location_name!=null){
+	if(isset($mql_array['result'][$i]['key'][0]['value'])){
+		$location_name=$mql_array['result'][$i]['key'][0]['value'];
+	}
+	else{
+		$location_name=null;
+	}
+	if(isset($location_name)){
 		$location_name_array['locations'][$i] = unicode2utf($location_name);
 	}
-	if($location_name==null){
+	else{
 		break;
 	}
 }
@@ -235,20 +243,29 @@ $endtime3 = microtime(true);
 
 $starttime4 = microtime(true);
 // Wir gehen nun alle gefunden Locations durch und checken, ob sie einen hasPhotoCollection-Tag auf DBpedia besitzen
-for ($i = 0; $i < count($location_name_array['locations']); $i++) {
-	// Wir generieren zunaechst eine Query-URL fuer die Location
-	$searchURL = getUrlDbpediaPhotoCollection($location_name_array['locations'][$i]);
-	// Die eigentliche Abfrage
-	$responseArray = json_decode(request($searchURL),true);
-	// Wir lesen nun die fuer uns relevante Stelle heraus
-	$url = $responseArray["results"]["bindings"][0]["hasPhotoCollection"]["value"];	
-	// Wenn keine PhotoCollection vorhanden ist diese Variable null!
-	if($url!=null){
-		$location_url_array['locations'][] = $url;
+if(isset($location_name_array['locations'])){
+	for ($i = 0; $i < count($location_name_array['locations']); $i++) {
+		// Wir generieren zunaechst eine Query-URL fuer die Location
+		$searchURL = getUrlDbpediaPhotoCollection($location_name_array['locations'][$i]);
+		// Die eigentliche Abfrage
+		$responseArray = json_decode(request($searchURL),true);
+		// Wir lesen nun die fuer uns relevante Stelle heraus
+		if(isset($responseArray["results"]["bindings"][0]["hasPhotoCollection"]["value"])){
+			$url = $responseArray["results"]["bindings"][0]["hasPhotoCollection"]["value"];	
+		}
+		else{
+			$url=null;
+		}
+		// Wenn keine PhotoCollection vorhanden ist diese Variable null!
+		if($url!=null){
+			// wg FlickrWrappr $location_url_array['locations'][] = $url;
+			$location_url_array['locations'][] = str_replace("http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/",HOMEPAGE_URL."flickrwrappr/flickrwrappr.php?item=",$url);
+		}
 	}
 }
 $endtime4 = microtime(true);
 
+//print_r($location_url_array);
 
 /////////////////////////////////////////// FlickrWrappr-Query ///////////////////////////////////////////
 
@@ -257,7 +274,12 @@ $image_urls = array(); //array umbennen fürs naming-schema
 // Der Counter zaehlt durch, wie viele finale Locations mit Bildlinks wir schon abgespeichert haben
 $counter = 0;
 // Der Location_Count gibt an, wie viele Locations wir maximal zur Verfügung haben
-$location_count = count($location_url_array['locations']);
+if(isset($location_url_array['locations'])){
+	$location_count = count($location_url_array['locations']);
+}
+else{
+	$location_count = 0;
+}
 // Der Corrector sorgt dafuer, dass die for-Schleife bei einer zu kleinen Anzahl an Locations (<3) oder 
 // "kaputten" Locations trotzdem haeufig genug durchlaeuft 
 $corrector = 0;
@@ -281,7 +303,8 @@ for ($i = 0; $i<$location_count+$corrector; $i++) {
 				// Reinladen der Stadt und setzen der passenden URL fuer die FlickrWrappr-Abfrage
 				$searchURL = getUrlDbpediaPhotoCollection($location);
 				$responseArray = json_decode(request($searchURL),true); 
-				$location_url = $responseArray["results"]["bindings"][0]["hasPhotoCollection"]["value"].'?format=rdf';
+				// wg FlickrWrappr $location_url = $responseArray["results"]["bindings"][0]["hasPhotoCollection"]["value"].'?format=rdf';
+				$location_url = str_replace("http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/",HOMEPAGE_URL."flickrwrappr/flickrwrappr.php?item=",$responseArray["results"]["bindings"][0]["hasPhotoCollection"]["value"]).'&format=rdf';
 			}
 			// Hochzaehlen von no_more_locations, da wir einmal die Stadt reingeladen haben sowie setzen des Namens
 			$image_urls[($counter+1)][0]=$location;
@@ -290,8 +313,10 @@ for ($i = 0; $i<$location_count+$corrector; $i++) {
 		// Wir haben noch genug Locations!
 		else{
 			// Wir setzen die Location-URL und setzen den Namen
-			$location_url = $location_url_array['locations'][$iterator_zahlen[$i]].'?format=rdf';
-			$image_urls[($counter+1)][0]=str_replace("http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/","",$location_url_array['locations'][$iterator_zahlen[$i]]);
+			// wg FlickrWrappr $location_url = $location_url_array['locations'][$iterator_zahlen[$i]].'?format=rdf';
+			$location_url = $location_url_array['locations'][$iterator_zahlen[$i]].'&format=rdf';
+			// wg FlickrWrappr $image_urls[($counter+1)][0]=str_replace("http://www4.wiwiss.fu-berlin.de/flickrwrappr/photos/","",$location_url_array['locations'][$iterator_zahlen[$i]]);
+			$image_urls[($counter+1)][0]=str_replace(HOMEPAGE_URL."flickrwrappr/flickrwrappr.php?item=","",$location_url_array['locations'][$iterator_zahlen[$i]]);
 		}
 		
 		// Nur falls wir zum ersten mal die Stadt benutzen muessen, muessen wir diese reinladen!
@@ -366,9 +391,8 @@ for($i=0;$i<3;$i++){
 		$result["City"]["Locations"][$i]["Type"]="Touristic Attraction";
 	}
 	// Und nun noch die zwei herausgesuchten Bildlinks
-	//var_dump($image_urls[$i+1][$zufallszahl[0]]);
-	$result["City"]["Locations"][$i]["PictureURLs"][0]= $image_urls[$i+1][$zufallszahl[0]];
-	$result["City"]["Locations"][$i]["PictureURLs"][1]= $image_urls[$i+1][$zufallszahl[1]];	
+	$result["City"]["Locations"][$i]["PictureURLs"][0]=$image_urls[$i+1][$zufallszahl[0]];
+	$result["City"]["Locations"][$i]["PictureURLs"][1]=$image_urls[$i+1][$zufallszahl[1]];	
 }
 $endtime6 = microtime(true);
 
@@ -409,11 +433,26 @@ if($debugmode){
 	echo "||||||||||||||||||||||||||||||| JSON-Output |||||||||||||||||||||||||||||||";
 	print_deb($result);
 	echo "||||||||||||||||||||||||||| Gefundene Locations |||||||||||||||||||||||||||";
-	print_deb($location_name_array);
+	if(isset($location_name_array)){
+		print_deb($location_name_array);
+	}
+	else{
+		print_deb("-");
+	}
 	echo "|||||||||||||||||||||| Locations mit PhotoCollection ||||||||||||||||||||||";
-	print_deb($location_url_array);
+	if(isset($location_url_array)){
+		print_deb($location_url_array);
+	}
+	else{
+		print_deb("-");
+	}
 	echo "|||||||||||||||||||||||| Herausgesuchte Bildlinks |||||||||||||||||||||||||";
-	print_deb($image_urls);
+	if(isset($image_urls)){
+		print_deb($image_urls);
+	}
+	else{
+		print_deb("-");
+	}
 	echo "</body></html>";
 }
 // "Normale" Ausgabe fuer die Kommunikation zwischen den Programmteilen
