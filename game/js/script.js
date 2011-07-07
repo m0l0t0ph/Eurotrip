@@ -173,6 +173,7 @@ var Map = {
         myOptions: {
                 zoom: 5,
                 center: new google.maps.LatLng(48.99643826296838, 8.397674685546917),
+                draggableCursor: "crosshair",
                 mapTypeControl: false,
                 navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL, position: google.maps.ControlPosition.TOP_RIGHT },
                 streetViewControl: false,
@@ -316,7 +317,7 @@ var Question = {
                           $('#getHint').block({ message: null });
                       }
                       Answers.currentCity.abstract = data;
-                      //console.log(Answers.currentCity.abstract);
+                      console.log(Answers.currentCity.abstract);
         });
     },
     
@@ -329,7 +330,7 @@ var Question = {
         
         console.log("bilder fuer " + location.name);
         
-        $.getJSON("getPictures.php", 
+        $.getJSON("getPictures2.php", 
         { 'location': location.name },
             function(data) {
                 var city = data.City;
@@ -480,7 +481,6 @@ var Question = {
             this.picturesSlide("up");
         }
         
-        // uncomment when getPictures is back up
         $('.polaroid').find('img').each(function(i) {
             $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
