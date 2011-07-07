@@ -17,12 +17,13 @@ var Game = {
     // Set up the game for the first time 
     init: function() {
         
+        // get list of cities and load the map
         Question.getCities();
         Map.load();
         
         $.blockUI.defaults.css = {};
         
-        
+        // Welcome screen
         this.displayDialog($('#welcome'));
         
         var $getInfo = $('#getInfo');
@@ -113,6 +114,7 @@ var Game = {
         //          points.text(this.pointsTotal);
         //      }
     },
+    // displays the passed element as a dialog
     displayDialog: function($element) {
         var windowWidth = window.innerWidth,
                windowHeight = window.innerHeight,
@@ -277,6 +279,7 @@ var Question = {
         var $getInfo = $('#getInfo');
         $getInfo.find('b:last').hide();
         $getInfo.find('b:first').show();
+        $getInfo.unblock();
         
         // pick last city as question, cache it and remove it from array (stack...) 
         Answers.currentCity = Answers.cities.pop();
@@ -309,12 +312,13 @@ var Question = {
     
     // loads part of abstract as a hint to the player 
     getHint: function() {
+        var queryString = Answers.currentCity.name.replace(/ /g, "_");
         $.getJSON("getInfo.php", 
-                { city:         Answers.currentCity.name,
+                { city:         queryString,
                   dbPediaUrl:   Answers.currentCity.dbPediaUrl 
                   }, function(data) {
-                      if(data === "") {
-                          $('#getHint').block({ message: null });
+                      if(!data) {
+                          $('#getInfo').block({ message: null });
                       }
                       Answers.currentCity.abstract = data;
                       console.log(Answers.currentCity.abstract);
@@ -330,15 +334,16 @@ var Question = {
             location = Answers.currentCity;
         }
         
-        console.log("bilder fuer " + location.name);
+        //console.log("bilder fuer " + location.name);
         queryString = location.name.replace(/ /g, "_");
         console.log("bilder fuer " + queryString);
+        
         $.getJSON("getPictures2.php", 
         { 'location': queryString },
             function(data) {
                 var city = data.City;
                 location.photoCollection = city.PhotoCollection;
-                console.log(city);
+                //console.log(city);
                 $.each(city.Locations, function(key, value) {
                     var tempSight = new Sight();
                     tempSight.name = value.Name;
@@ -353,18 +358,12 @@ var Question = {
                     
                     location.sights.push(tempSight);
                 });
-                console.log(location.sights);
+                //console.log(location.sights);
                 
                 if(!isPreload) {
                     Question.displayQuestion();
                 }
         });
-        
-        
-        //delete when pictures work again
-        // if(!isPreload) {
-        //             Question.displayQuestion();
-        //         }
     },
     
     // gets the data for the Bonus Question (flags of 3 different countries) 
