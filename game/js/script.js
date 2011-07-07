@@ -316,7 +316,7 @@ var Question = {
                           $('#getHint').block({ message: null });
                       }
                       Answers.currentCity.abstract = data;
-                      console.log(Answers.currentCity.abstract);
+                      //console.log(Answers.currentCity.abstract);
         });
     },
     
@@ -329,7 +329,7 @@ var Question = {
         
         console.log("bilder fuer " + location.name);
         
-        $.getJSON("getPictures2.php", 
+        $.getJSON("getPictures.php", 
         { 'location': location.name },
             function(data) {
                 var city = data.City;
