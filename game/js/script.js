@@ -323,15 +323,18 @@ var Question = {
     
     // loads pictures (with preloading option) 
     getPictures: function(isPreload) {
-        var location = Answers.cities[Answers.cities.length - 1];
+        var location = Answers.cities[Answers.cities.length - 1],
+            queryString = "";
+            
         if (!isPreload || Answers.cities.length == 0) {
             location = Answers.currentCity;
         }
         
         console.log("bilder fuer " + location.name);
-        
+        queryString = location.name.replace(/ /g, "_");
+        console.log("bilder fuer " + queryString);
         $.getJSON("getPictures2.php", 
-        { 'location': location.name },
+        { 'location': queryString },
             function(data) {
                 var city = data.City;
                 location.photoCollection = city.PhotoCollection;
