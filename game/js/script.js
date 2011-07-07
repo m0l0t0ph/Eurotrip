@@ -1,5 +1,5 @@
 var Game = {
-    /** Basic gameplay settings, change to your needs **/
+    // Basic gameplay settings, change to your needs 
     startQuesPts: 1000,
     penaltyDistance: 1000,
     quesPerRound: 10,
@@ -8,13 +8,13 @@ var Game = {
     morePicsPoints: -200,
     bonusPoints: 100,
     
-    /** these control the flow of things **/
+    // these control the flow of things 
     pointsTotal: 0,
     questionNr: 0,
     hasMorePics: false,
     hasHint: false,
     
-    /** Set up the game for the first time **/
+    // Set up the game for the first time 
     init: function() {
         
         Question.getCities();
@@ -29,7 +29,7 @@ var Game = {
         $getInfo.find('span:last').hide();
         $getInfo.find('b:last').hide();
         
-        /** bind appropriate functions to buttons **/
+        // bind appropriate functions to buttons
         $('#getMorePics').click(function(event) {
             event.preventDefault();
             
@@ -86,7 +86,7 @@ var Game = {
         Question.getCities();
     },
     
-    /** Calculate points **/
+    // Calculate points
     calculatePoints: function(entfernung, diffPoints) {
     	var points = 0;
     	if(entfernung !== null) {
@@ -106,12 +106,12 @@ var Game = {
         var points = $('#points'),
     	    currCount = parseInt(points.html());
     	points.text(this.pointsTotal);
-        /**points.text(currCount + 7);
-        if (currCount + 7 <= this.pointsTotal) {
-            setTimeout('Game.setPoints()', 15);
-        } else {
-    		points.text(this.pointsTotal);
-    	}**/
+        //points.text(currCount + 7);
+        // if (currCount + 7 <= this.pointsTotal) {
+        //             setTimeout('Game.setPoints()', 15);
+        //         } else {
+        //          points.text(this.pointsTotal);
+        //      }
     },
     displayDialog: function($element) {
         var windowWidth = window.innerWidth,
@@ -136,7 +136,7 @@ var Map = {
     directionsService : {},
     directionsDisplay: {},
     
-    /** basic map settings **/
+    // basic map settings 
     config: {
         myLatlng: new google.maps.LatLng(48.99643826296838, 8.397674685546917),
         rendererOptions: { preserveViewport: true },
@@ -180,7 +180,7 @@ var Map = {
             }
     },
     
-    /** load map **/
+    // load map 
     load: function() {
         this.map = new google.maps.Map(document.getElementById("map_canvas"), this.config.myOptions);
         var styledMapOptions = {
@@ -202,7 +202,7 @@ var Map = {
     	});
     },
     
-    /** get distance to actual location from Maps API **/
+    // get distance to actual location from Maps API 
     getDistance: function(clickedLocation) {
     	var ergebnisArray = [],
     	    userInput = clickedLocation,
@@ -248,7 +248,7 @@ var Map = {
 };
 
 var Question = {
-    /** loads a selection of ten cities **/
+    // loads a selection of ten cities 
     getCities: function() {
         $.getJSON("getCity.php", function(data) {
     	  for(var i = 0, limit = data.length; i < limit; i += 1) {
@@ -265,7 +265,7 @@ var Question = {
     	});
     },
     
-    /** sets up each question **/
+    // sets up each question 
     generate: function() {
         Game.setQuestionNr();
         Answers.bonus = [];
@@ -277,35 +277,36 @@ var Question = {
         $getInfo.find('b:last').hide();
         $getInfo.find('b:first').show();
         
-        /** pick last city as question, cache it and remove it from array (stack...) **/
+        // pick last city as question, cache it and remove it from array (stack...) 
         Answers.currentCity = Answers.cities.pop();
         console.log(Answers.currentCity);
         
         if (Game.questionNr === 1) {
             this.getPictures(false);
         } else {
-            /** Marker usw. entfernen und Karte zentrieren.
-                evtl. zu radikal hier die komplette Karte neuzuladen **/
+            // Marker usw. entfernen und Karte zentrieren, evtl. zu radikal hier die komplette Karte neuzuladen 
             Map.load();
             
+            // reset help buttons
             Game.hasMorePics = false;
             Game.hasHint = false;
+            $('#getMorePics').unblock();
             
             this.displayQuestion();
         }
         
-        /** preload pictures for next question **/
+        // preload pictures for next question 
         this.getPictures(true);
         
-        /** preload abstract for better responsivness **/
+        // preload abstract for better responsivness 
         this.getHint();
         
-        /** preload bonus question for better responsivness **/
+        // preload bonus question for better responsivness 
         this.getBonusQuestion();
         
     },
     
-    /** loads part of abstract as a hint to the player **/
+    // loads part of abstract as a hint to the player 
     getHint: function() {
         $.getJSON("getInfo.php", 
                 { city:         Answers.currentCity.name,
@@ -319,7 +320,7 @@ var Question = {
         });
     },
     
-    /** loads pictures (with preloading option) **/
+    // loads pictures (with preloading option) 
     getPictures: function(isPreload) {
         var location = Answers.cities[Answers.cities.length - 1];
         if (!isPreload || Answers.cities.length == 0) {
@@ -327,7 +328,7 @@ var Question = {
         }
         
         console.log("bilder fuer " + location.name);
-        /* uncomment when this works again
+        
         $.getJSON("getPictures2.php", 
         { 'location': location.name },
             function(data) {
@@ -354,15 +355,15 @@ var Question = {
                     Question.displayQuestion();
                 }
         });
-        */
+        
         
         //delete when pictures work again
-        if(!isPreload) {
-            Question.displayQuestion();
-        }
+        // if(!isPreload) {
+        //             Question.displayQuestion();
+        //         }
     },
     
-    /** gets the data for the Bonus Question (flags of 3 different countries) **/
+    // gets the data for the Bonus Question (flags of 3 different countries) 
     getBonusQuestion: function() {
         var countries = [],
             ran = 0,
@@ -373,7 +374,7 @@ var Question = {
         for(var i = 0; countries.length < 3; i += 1) {
             ran = Math.floor(Math.random()*citiesLength);
             
-            /** no duplicates and avoid UK since the link is wrong in DBpedia **/
+            // no duplicates and avoid UK since the link is wrong in DBpedia 
             if($.inArray(Answers.countries[ran], countries) === -1 && Answers.countries[ran] !== "United Kingdom") {
                 countries.push(Answers.countries[ran]);
             }
@@ -393,7 +394,7 @@ var Question = {
         });
     },
     
-    /** checks if the given answer was correct **/
+    // checks if the given answer was correct 
     evalBonusQuestion : function(country) {
         if(country === Answers.currentCity.country) {
             Game.calculatePoints(null, Game.bonusPoints);
@@ -407,9 +408,9 @@ var Question = {
         }
     },
     
-    /** displays the Bonus Question **/
+    // displays the Bonus Question 
     displayBonusQuestion: function() {
-        /** reset visibility **/
+        // reset visibility 
         $('#bonusQuestion').find('b').hide();
         $('#bonusQuestion').find('form').show();
         
@@ -425,7 +426,7 @@ var Question = {
         $('#bonusQuestion').show();
     },
     
-    /** displays the hint text **/
+    // displays the hint text 
     displayHint: function() {
         $('#hintText').html(Answers.currentCity.abstract);
         if($('#hint').is(":visible")) {
@@ -436,7 +437,7 @@ var Question = {
         }
     },
     
-    /** slide effect, takes "up" or "down" as a parameter **/
+    // slide effect, takes "up" or "down" as a parameter 
     picturesSlide: function(direction) {
         var $getInfo = $('#getInfo'),
             $polaroid = $('.polaroid');
@@ -471,7 +472,7 @@ var Question = {
         }
     },
     
-    /** displays the pictures of the question **/
+    // displays the pictures of the question 
     displayQuestion: function(batch) {
         batch = typeof(batch) != 'undefined' ? batch : 0;
         
@@ -479,11 +480,11 @@ var Question = {
             this.picturesSlide("up");
         }
         
-        /** uncomment when getPictures is back up
+        // uncomment when getPictures is back up
         $('.polaroid').find('img').each(function(i) {
             $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
-        **/
+        
         
         $('.polaroid').fadeOut('slow', function() {
             $(this).fadeIn('slow');
@@ -493,7 +494,7 @@ var Question = {
 
     },
   
-   /** displays the answer screen **/
+   // displays the answer screen 
    displayAnswer: function(result) {
    	   var $answer = $('#answer');
            
@@ -503,7 +504,7 @@ var Question = {
    	                    "That would mean a " + result[1] + " drive.";
    	   $answer.find('#answerText').html(answer);
    	   
-   	   /** display Bonus Question if player was close enough **/
+   	   // display Bonus Question if player was close enough 
    	   if (result[0] <= Game.distanceBonusQuestion) {
            this.displayBonusQuestion();
        }
@@ -512,13 +513,13 @@ var Question = {
        this.writeResult();
    },
    
-   /** outputs the collected information to a file, database etc. **/
+   // outputs the collected information to a file, database etc. 
    writeResult: function() {
        $.post("writeResult.php", { city: Answers.currentCity } );
    }
 };
 
-/** Object for storing the answers **/
+// Object for storing the answers 
 var Answers = {
     currentCity: {},
     countries: [],
@@ -532,7 +533,7 @@ var Answers = {
     }
 };
 
-/** Object for a city with its properties and reset method **/
+// Object for a city with its properties and reset method 
 var City = function() {
     this.name = "";
     this.dbPediaUrl = "";
@@ -558,12 +559,12 @@ var Sight = function() {
     this.pictures = [];
 };
 
-/** Helper Function **/
+// Helper Function 
 function random(from, to){
        return Math.floor(Math.random() * (to - from + 1) + from);
 }
 
-/** onReady **/
+// onReady 
 $(function() {
    
    Game.init();
