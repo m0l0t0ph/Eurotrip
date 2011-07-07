@@ -51,7 +51,7 @@ var Game = {
             }
         });
         
-        $('#answer a').click(function(event) {
+        $('#answer').find('a').click(function(event) {
             event.preventDefault();
             Question.generate();
         });
@@ -410,10 +410,10 @@ var Question = {
     /** displays the Bonus Question **/
     displayBonusQuestion: function() {
         /** reset visibility **/
-        $('#bonusQuestion b').hide();
-        $('#bonusQuestion form').show();
+        $('#bonusQuestion').find('b').hide();
+        $('#bonusQuestion').find('form').show();
         
-        $('#bonusQuestion label').each(function(i) {
+        $('#bonusQuestion').find('label').each(function(i) {
             $(this).find('input').attr('value', Answers.bonus[i].name);
             $(this).find('img').attr('src', Answers.bonus[i].flag);
             $(this).find('input').click(function(event) {
@@ -438,9 +438,10 @@ var Question = {
     
     /** slide effect, takes "up" or "down" as a parameter **/
     picturesSlide: function(direction) {
-        var $getInfo = $('#getInfo');
+        var $getInfo = $('#getInfo'),
+            $polaroid = $('.polaroid');
         if(direction === "up") {
-            $('div.polaroid').each(function(i) {
+            $polaroid.each(function(i) {
                 var move = i*-20;
                 $(this).animate({
                     top: move+'px'
@@ -454,7 +455,7 @@ var Question = {
          
         if(direction === "down") {
             var height = $('#hint').outerHeight(true);
-            $('div.polaroid').each(function(i) {
+            $polaroid.each(function(i) {
                 if(i > 0) {
                     var move = i*height/2;
                     $(this).animate({
@@ -479,7 +480,7 @@ var Question = {
         }
         
         /** uncomment when getPictures is back up
-        $('.polaroid img').each(function(i) {
+        $('.polaroid').find('img').each(function(i) {
             $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
         **/
