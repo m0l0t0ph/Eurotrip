@@ -370,17 +370,22 @@ var Question = {
     getBonusQuestion: function() {
         var countries = [],
             ran = 0,
-            citiesLength = Answers.countries.length;
-        
-        countries.push(Answers.currentCity.country);
+            citiesLength = Answers.countries.length - 1;
         
         for(var i = 0; countries.length < 3; i += 1) {
-            ran = Math.floor(Math.random()*citiesLength);
+            ran = Math.floor(Math.random() * citiesLength);
             
-            // no duplicates and avoid UK since the link is wrong in DBpedia 
+            // no duplicates && avoid UK since the link is wrong in DBpedia 
             if($.inArray(Answers.countries[ran], countries) === -1 && Answers.countries[ran] !== "United Kingdom") {
                 countries.push(Answers.countries[ran]);
             }
+        }
+        
+        // insert correct answer at random position
+        ran = Math.floor(Math.random()*2.9);
+        // no duplicates
+        if($.inArray(Answers.currentCity.country, countries) === -1) {
+            countries[ran] = Answers.currentCity.country;
         }
         
         $.getJSON("getFlag.php", 
