@@ -1,4 +1,6 @@
 <?php 
+/* by Clemens Stolle 2011 */
+
 include "check.php";
 
 // Settings
@@ -55,7 +57,7 @@ for($i=0; count($location) < 10; $i++) {
     array_splice($result, $ran, 1);
     
     // Blacklist für "kaputte" Städte
-    if($dbPedia AND $cityName != "Sarajevo" AND $cityName != "Szczecin" AND $cityName != "Belgrade" AND $cityName != "Pristina") {
+    if($dbPedia AND $cityName != "Sarajevo" AND $cityName != "Szczecin" AND $cityName != "Belgrade" AND $cityName != "Pristina" AND $cityName != "Turin") {
            $city[0] = $cityName;
            $city[1] = $dbPedia;
            $city[2] = $country;

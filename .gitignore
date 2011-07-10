@@ -43,3 +43,6 @@ game/publish/htaccess
 game/publish/js/script_save.js
 game/publish/js/scripts-0003.min.js
 game/.DS_Store
+game/build/
+game/publish/
+game/intermediate/

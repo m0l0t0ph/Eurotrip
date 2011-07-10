@@ -1,3 +1,8 @@
+// All work done by Clemens Stolle 
+// Copyright 2011
+// This script controls the UI and the gameplay of "Eurotrip"
+
+
 // Object for storing the answers 
 var Answers = {
     currentCity: {},
@@ -102,7 +107,7 @@ var Game = {
         //      }
     },
     
-    // displays the passed element as a dialog
+    // displays the passed element (jQuery object) as a dialog
     displayDialog: function ($element) {
         var windowWidth = window.innerWidth,
             windowHeight = window.innerHeight,
@@ -203,7 +208,7 @@ var Question = {
             location = Answers.currentCity;
         }
         
-        //console.log("bilder fuer " + location.name);
+        // replace spaces with underscore, for locations with multiple words in the name
         queryString = location.name.replace(/ /g, "_");
         console.log("bilder fuer " + queryString);
         
@@ -353,18 +358,19 @@ var Question = {
     
     // displays the pictures of the question 
     displayQuestion: function (batch) {
+        var $polaroid = $('.polaroid');
         batch = typeof (batch) !== 'undefined' ? batch : 0;
         
         if ($('#hint').is(':visible')) {
             this.picturesSlide("up");
         }
         
-        $('.polaroid').find('img').each(function (i) {
+        $polaroid.find('img').each(function (i) {
             $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
         
         
-        $('.polaroid').fadeOut('slow', function () {
+        $polaroid.fadeOut('slow', function () {
             $(this).fadeIn('slow');
         });
         
@@ -448,7 +454,7 @@ var Map = {
         }
     },
     
-    // load map 
+    // loads map 
     load: function () {
         this.map = new google.maps.Map(document.getElementById("map_canvas"), this.config.myOptions);
         var styledMapOptions = {
@@ -459,8 +465,6 @@ var Map = {
         
         this.directionsService = new google.maps.DirectionsService();
         this.directionsDisplay = new google.maps.DirectionsRenderer(Map.config.rendererOptions);
-        
-        
         
         this.map.mapTypes.set('Spiel', gameMapType);
         this.map.setMapTypeId('Spiel');
@@ -502,17 +506,15 @@ var Map = {
 var Eurotrip = {
     // Set up the game for the first time 
     init: function () {
+        var $getInfo = $('#getInfo');
         
         // get list of cities and load the map
         Question.getCities();
         Map.load();
         
-        //$.blockUI.defaults.css = {};
-        
         // Welcome screen
         Game.displayDialog($('#welcome'));
         
-        var $getInfo = $('#getInfo');
         $getInfo.find('span:last').hide();
         $getInfo.find('b:last').hide();
         
@@ -529,7 +531,7 @@ var Eurotrip = {
             }
         });
         
-        $('#getInfo').click(function (event) {
+        $getInfo.click(function (event) {
             event.preventDefault();
             Question.displayHint();
             if (Game.hasHint === false) {
