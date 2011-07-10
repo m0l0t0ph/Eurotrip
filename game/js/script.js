@@ -18,13 +18,13 @@ var City = function () {
     this.dbPediaUrl = "";
     this.photoCollection = "";
     this.country = "";
-    this.abstract = "";
+    this.hint = "";
     this.sights = [];
     this.reset = function () {
         this.name = "";
         this.dbPediaUrl = "";
         this.country = "";
-        this.abstract = "";
+        this.hint = "";
         this.dbPediaUrl = "";
         this.sights = [];
         this.photoCollection = "";
@@ -174,7 +174,7 @@ var Question = {
         // preload pictures for next question 
         this.getPictures(true);
         
-        // preload abstract for better responsivness 
+        // preload hint for better responsivness 
         this.getHint();
         
         // preload bonus question for better responsivness 
@@ -182,15 +182,15 @@ var Question = {
         
     },
     
-    // loads part of abstract as a hint to the player 
+    // loads part of hint as a hint to the player 
     getHint: function () {
         var queryString = Answers.currentCity.name.replace(/ /g, "_");
         $.getJSON("getInfo.php", { city: queryString, dbPediaUrl: Answers.currentCity.dbPediaUrl }, function (data) {
             if (!data) {
                 $('#getInfo').block({ message: null });
             }
-            Answers.currentCity.abstract = data;
-            console.log(Answers.currentCity.abstract);
+            Answers.currentCity.hint = data;
+            console.log(Answers.currentCity.hint);
         });
     },
     
@@ -306,7 +306,7 @@ var Question = {
     
     // displays the hint text 
     displayHint: function () {
-        $('#hintText').html(Answers.currentCity.abstract);
+        $('#hintText').html(Answers.currentCity.hint);
         if ($('#hint').is(":visible")) {
             this.picturesSlide("up");
         }
@@ -507,7 +507,7 @@ var Eurotrip = {
         Question.getCities();
         Map.load();
         
-        $.blockUI.defaults.css = {};
+        //$.blockUI.defaults.css = {};
         
         // Welcome screen
         Game.displayDialog($('#welcome'));
