@@ -10,19 +10,18 @@
 \contentsline {section}{\numberline {3}Projektplanung}{4}
 \contentsline {subsection}{\numberline {3.1}Arbeitspakete und Zust\IeC {\"a}ndigkeiten}{4}
 \contentsline {subsection}{\numberline {3.2}Evaluierung}{4}
-\contentsline {section}{\numberline {4}Umsetzung, Softwarepakete und Programm}{6}
-\contentsline {subsection}{\numberline {4.1}Schematischer Aufbau, Konzeptskizze}{6}
-\contentsline {subsection}{\numberline {4.2}Verwendete LOD-Datens\IeC {\"a}tze}{6}
-\contentsline {subsection}{\numberline {4.3}Verwendete Technologien und Frameworks}{7}
-\contentsline {subsection}{\numberline {4.4}Dokumentation der Methoden und Funktionen}{7}
-\contentsline {subsection}{\numberline {4.5}Stabilit\IeC {\"a}t und Verf\IeC {\"u}gbarkeit}{8}
-\contentsline {subsection}{\numberline {4.6}Generierung strukturierter Datens\IeC {\"a}tze}{8}
-\contentsline {subsection}{\numberline {4.7}Installation und Betrieb}{9}
-\contentsline {section}{\numberline {5}Lessons learned}{10}
-\contentsline {subsection}{\numberline {5.1}Reflektion der Projektplanung}{10}
-\contentsline {subsection}{\numberline {5.2}Erkenntnisse}{10}
-\contentsline {subsection}{\numberline {5.3}Vor- und Nachteile von Linked Open Data}{10}
-\contentsline {section}{\numberline {6}Fazit}{11}
-\contentsline {subsection}{\numberline {6.1}Zusammenfassung}{11}
-\contentsline {subsection}{\numberline {6.2}St\IeC {\"a}rken und Schw\IeC {\"a}chen}{11}
-\contentsline {subsection}{\numberline {6.3}Ausblick}{11}
+\contentsline {section}{\numberline {4}Umsetzung, Softwarepakete und Programm}{5}
+\contentsline {subsection}{\numberline {4.1}Schematischer Aufbau}{5}
+\contentsline {subsection}{\numberline {4.2}Verwendete Technologien und Frameworks}{6}
+\contentsline {subsection}{\numberline {4.3}Verwendete LOD-Datens\IeC {\"a}tze}{6}
+\contentsline {subsection}{\numberline {4.4}Stabilit\IeC {\"a}t und Verf\IeC {\"u}gbarkeit}{7}
+\contentsline {subsection}{\numberline {4.5}Generierung strukturierter Datens\IeC {\"a}tze}{7}
+\contentsline {subsection}{\numberline {4.6}Installation und Betrieb}{8}
+\contentsline {section}{\numberline {5}Lessons learned}{9}
+\contentsline {subsection}{\numberline {5.1}Erkenntnisse}{9}
+\contentsline {subsection}{\numberline {5.2}Vor- und Nachteile von Linked Open Data}{10}
+\contentsline {section}{\numberline {6}Fazit}{12}
+\contentsline {subsection}{\numberline {6.1}Zusammenfassung}{12}
+\contentsline {subsection}{\numberline {6.2}St\IeC {\"a}rken und Schw\IeC {\"a}chen}{12}
+\contentsline {subsection}{\numberline {6.3}Ausblick}{12}
+\contentsline {section}{\numberline {7}Anhang}{I}
