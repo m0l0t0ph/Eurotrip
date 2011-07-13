@@ -30,13 +30,18 @@ $search = "http://api.geonames.org/searchJSON?q=&continentCode=$continent&lang=e
 		$result = array();
 		foreach ($array as $value) {
             //Nur Städte größer als $minPopulation, nicht in Russland oder Ukraine. Zusätzl. Deutschland Filter
-            if(
-                (($value->population > $minPopulation) AND ($value->countryCode != "RU") AND ($value->countryCode != "UA")) 
+            if( (($value->population > $minPopulation) AND ($value->countryCode != "RU") AND ($value->countryCode != "UA")) 
                 OR (($value->population > $minPopulationGer) AND ($value->countryCode == $countryFocus))
                 ) {
-                $cache['name'] = $value->name;
-                $cache['country'] = $value->countryName;
-                $result[] = $cache;
+                // Blacklist für "kaputte" Städte
+                if ($value->name != "Sarajevo" AND $value->name != "Szczecin" AND 
+                    $value->name != "Belgrade" AND $value->name != "Pristina" AND 
+                    $value->name != "Saragossa") {
+                        $cache['name'] = $value->name;
+                        $cache['country'] = $value->countryName;
+                        $result[] = $cache;
+                    }
+                
             }
         }
 
@@ -56,8 +61,11 @@ for($i=0; count($location) < 10; $i++) {
     //Keine Duplikate
     array_splice($result, $ran, 1);
     
-    // Blacklist für "kaputte" Städte
-    if($dbPedia AND $cityName != "Sarajevo" AND $cityName != "Szczecin" AND $cityName != "Belgrade" AND $cityName != "Pristina" AND $cityName != "Turin") {
+    if ($cityName == "Frankfurt am Main") {
+        $cityName = "Frankfurt";
+    }
+    
+    if ($dbPedia) {
            $city[0] = $cityName;
            $city[1] = $dbPedia;
            $city[2] = $country;

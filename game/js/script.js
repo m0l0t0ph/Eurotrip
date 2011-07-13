@@ -55,14 +55,14 @@ var Game = {
     setQuestionNr: function () {
         if (this.questionNr < this.quesPerRound) {
             this.questionNr = this.questionNr + 1;
-            
-        } else {
+        } 
+        else {
             var $endRound = $('#endOfRound');
             $endRound.find('b').html(this.pointsTotal + " Points");
             this.displayDialog($endRound);
         }
-            
     },
+    
     newRound: function () {
         this.pointsTotal = 0;
         this.questionNr = 0;
@@ -157,6 +157,12 @@ var Question = {
         
         if (Game.questionNr === 1) {
             this.getPictures(false);
+            
+            // preload pictures for the other questions
+            // helps us hide the long loading times of getPictures2.php 
+            for (var i=1; i < 10; i += 1) {
+                this.getPictures(true, i);
+            }
         } else {
             // Marker usw. entfernen und Karte zentrieren, evtl. zu radikal hier die komplette Karte neuzuladen 
             Map.load();
@@ -168,9 +174,6 @@ var Question = {
             
             this.displayQuestion();
         }
-        
-        // preload pictures for next question 
-        this.getPictures(true);
         
         // preload hint for better responsivness 
         this.getHint();
@@ -193,12 +196,12 @@ var Question = {
     },
     
     // loads pictures (with preloading option) 
-    getPictures: function (isPreload) {
-        var location = Answers.cities[Answers.cities.length - 1],
+    getPictures: function (isPreload, i) {
+        var location = Answers.cities[Answers.cities.length - i],
             queryString = "",
             $nextQuest = $('#answer').find('a'),
             $loading = $('#loading');
-        
+        console.log("i= " + i);
         $nextQuest.hide();
         $loading.fadeIn();
             
@@ -296,19 +299,22 @@ var Question = {
     // displays the Bonus Question 
     displayBonusQuestion: function () {
         // reset visibility 
-        $('#bonusQuestion').find('b').hide();
-        $('#bonusQuestion').find('form').show();
-        
-        $('#bonusQuestion').find('label').each(function (i) {
-            $(this).find('input').attr('value', Answers.bonus[i].name);
-            $(this).find('img').attr('src', Answers.bonus[i].flag);
-            $(this).find('input').click(function (event) {
-                event.preventDefault();
-                var country = $(this).val();
-                Question.evalBonusQuestion(country);
+        if (Answers.bonus.length !== 0) {
+            $('#bonusQuestion').find('b').hide();
+            $('#bonusQuestion').find('form').show();
+
+            $('#bonusQuestion').find('label').each(function (i) {
+                $(this).find('input').attr('value', Answers.bonus[i].name);
+                $(this).find('img').attr('src', Answers.bonus[i].flag);
+                $(this).find('input').click(function (event) {
+                    event.preventDefault();
+                    var country = $(this).val();
+                    Question.evalBonusQuestion(country);
+                });
             });
-        });
-        $('#bonusQuestion').show();
+            $('#bonusQuestion').show();
+        }
+        
     },
     
     // slide effect, takes "up" or "down" as a parameter 
@@ -358,9 +364,7 @@ var Question = {
         
         
         $polaroid.find('img').each(function (i) {
-            if (Answers.currentCity.sights.length !== 0) {
-                $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
-            }
+            $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
         });
         
         
