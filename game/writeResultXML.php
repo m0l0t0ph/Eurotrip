@@ -1,6 +1,6 @@
 
 <?php
-//This code is to save array 'city' into a Result.xml file as a Database
+//This code(Xinjie Du,1293509) is to save array 'city' into a Result.xml file as a Database
 
 //to get a array named 'city',put it into variable $city
 if (isset($_POST['city'])){
@@ -47,6 +47,7 @@ var_dump($city);
             )
         )
     ),
+    "playerDistance"=>"50",
     "reset"=>"undefined"
 );*/
 
@@ -86,6 +87,7 @@ var_dump($city);
             )
         )
     ),
+    "playerDistance"=>"108",
     "reset"=>"undefined"
 );*/
 
@@ -126,6 +128,7 @@ var_dump($city);
             )
         )
     ),
+    "playerDistance"=>"5",
     "reset"=>"undefined"
 );*/
 
@@ -208,7 +211,6 @@ function add_information($adddomdata,$additemdata,$addarraydata){
 		    		add_information($adddomdata,$addsubnode,$addvaluedata);
 		    		break;
 		    	}
-		    	
 		    }
 		}
 		//to find sights element and add the extra information
@@ -271,6 +273,21 @@ function add_information($adddomdata,$additemdata,$addarraydata){
 			    $additemchild->appendChild($additemtext);
 		    }
 		    
+		}
+		//add extra distanceinforamtion
+		if($addkeydata=="playerDistance"){
+			
+			$addchildnodes = $additemdata->childNodes;
+			foreach($addchildnodes as $addsubnode){
+				if($addsubnode->nodeName=="playerDistances"){
+				    
+				    $adddistancedata=$adddomdata->createElement("playerDistance");
+		            $addsubnode->appendChild($adddistancedata);
+	                $additemtext = $adddomdata->createTextNode($addvaluedata);
+			        $adddistancedata->appendChild($additemtext);
+			        break;
+				}
+			}
 		}		
 	}
 }
@@ -288,41 +305,53 @@ function creat_item($domdata,$itemdata,$arraydata){
 		
 	    //to judge if the value is another array or not.
 	    foreach($arraydata as $keydata => $valuedata){
-		    if($keydata=="0" | $keydata=="1" | $keydata=="2" ){
-			    echo "b";
-	            if(is_array($valuedata)){
-	        	    echo "c";
-	        	    $sightname=array_shift($valuedata);
-	        	    $itemchild = $domdata -> createElement($sightname);
-	        	    $itemdata->appendChild($itemchild);
-	        	    creat_item($domdata,$itemchild,$valuedata);
+	    	if($keydata=="playerDistance" && !($keydata=="0" | $keydata=="1"|$keydata=="2")){
+	    		$itemchild=$domdata->createElement("playerDistances");
+	    		$itemdata -> appendChild($itemchild);
+	    		$Distancedata=$domdata->createElement("playerDistance");
+	    		$itemchild->appendChild($Distancedata);
+	    		$itemtext = $domdata->createTextNode($valuedata);
+	    		$Distancedata->appendChild($itemtext);
+	    		
+	    	}
+	    	else{
+		        if($keydata=="0" | $keydata=="1" | $keydata=="2" ){
+			        echo "b";
+	                if(is_array($valuedata)){
+	        	        echo "c";
+	        	        $sightname=array_shift($valuedata);
+	        	        $itemchild = $domdata -> createElement($sightname);
+	        	        $itemdata->appendChild($itemchild);
+	        	        creat_item($domdata,$itemchild,$valuedata);
 	        	
-	            }
-	            else{
-	        	    echo "d";
-	        	    $itemchild = $domdata -> createElement("picture");
-	        	    $itemdata->appendChild($itemchild);
-	        	    $itemtext = $domdata->createTextNode($valuedata);
-			        $itemchild->appendChild($itemtext);
+	                }
+	                else{
+	        	        echo "d";
+	        	        $itemchild = $domdata -> createElement("picture");
+	        	        $itemdata->appendChild($itemchild);
+	        	        $itemtext = $domdata->createTextNode($valuedata);
+			            $itemchild->appendChild($itemtext);
 	        	
+	                }
 	            }
-	        }
-		    //add a childelement
-		    else{
-			    echo "e";
-		        $itemchild = $domdata->createElement($keydata);           
-                $itemdata->appendChild($itemchild);
-                if(is_array($valuedata)){
-            	    creat_item($domdata,$itemchild,$valuedata);
-		        }
+	    	
+		        //add a childelement
 		        else{
-			        echo "f"; 
-	                //add the text.
-	                $itemtext = $domdata->createTextNode($valuedata);
-			        $itemchild->appendChild($itemtext);
+			        echo "e";
+		            $itemchild = $domdata->createElement($keydata);           
+                    $itemdata->appendChild($itemchild);
+                    if(is_array($valuedata)){
+            	        creat_item($domdata,$itemchild,$valuedata);
+		            }
+		            else{
+			            echo "f"; 
+	                    //add the text.
+	                    $itemtext = $domdata->createTextNode($valuedata);
+			            $itemchild->appendChild($itemtext);
 		           
+		            }
 		        }
-		    }
+	    	}
 	    }
 	}
 }
