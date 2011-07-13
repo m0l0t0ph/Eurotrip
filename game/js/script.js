@@ -195,7 +195,12 @@ var Question = {
     // loads pictures (with preloading option) 
     getPictures: function (isPreload) {
         var location = Answers.cities[Answers.cities.length - 1],
-            queryString = "";
+            queryString = "",
+            $nextQuest = $('#answer').find('a'),
+            $loading = $('#loading');
+        
+        $nextQuest.hide();
+        $loading.fadeIn();
             
         if (!isPreload || Answers.cities.length === 0) {
             location = Answers.currentCity;
@@ -230,6 +235,10 @@ var Question = {
                 if (!isPreload) {
                     Question.displayQuestion();
                 }
+                
+                // simple loading indicator
+                $loading.hide();
+                $nextQuest.fadeIn();
         });
     },
     
@@ -302,17 +311,6 @@ var Question = {
         $('#bonusQuestion').show();
     },
     
-    // displays the hint text 
-    displayHint: function () {
-        $('#hintText').html(Answers.currentCity.hint);
-        if ($('#hint').is(":visible")) {
-            this.picturesSlide("up");
-        }
-        if ($('#hint').is(":hidden")) {
-            this.picturesSlide("down");
-        }
-    },
-    
     // slide effect, takes "up" or "down" as a parameter 
     picturesSlide: function (direction) {
         var $getInfo = $('#getInfo'),
@@ -358,8 +356,11 @@ var Question = {
             this.picturesSlide("up");
         }
         
+        
         $polaroid.find('img').each(function (i) {
-            $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
+            if (Answers.currentCity.sights.length !== 0) {
+                $(this).attr('src', Answers.currentCity.sights[i].pictures[batch]);
+            }
         });
         
         
@@ -387,6 +388,17 @@ var Question = {
         
         Game.displayDialog($answer);
         this.writeResult();
+    },
+    
+    // displays the hint text 
+    displayHint: function () {
+        $('#hintText').html(Answers.currentCity.hint);
+        if ($('#hint').is(":visible")) {
+            this.picturesSlide("up");
+        }
+        if ($('#hint').is(":hidden")) {
+            this.picturesSlide("down");
+        }
     },
    
     // outputs the collected information to a file, database etc. 

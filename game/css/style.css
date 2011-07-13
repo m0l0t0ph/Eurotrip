@@ -134,6 +134,7 @@ H3 { margin: 0 0 5px 0; font-size: 123.1% ;}
 #answerText { text-align: center; font-size: 108%; margin-bottom: 10px; }
 #answer B { color: #408000; font-size: 153.9%; font-weight: bold; margin: 10px; }
 #answer A { display: block; margin: 0 auto; margin-top: 5px; }
+#loading { text-align: center; }
 
 #bonusQuestion { display: none; width: 370px; margin: 0 auto; padding: 0; text-align: center;}
 #bonusQuestion IMG { width: 100px; height: 63px; }
