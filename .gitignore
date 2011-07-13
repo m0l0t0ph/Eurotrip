@@ -46,3 +46,4 @@ game/.DS_Store
 game/build/
 game/publish/
 game/intermediate/
+game/Results.xml

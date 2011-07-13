@@ -86,32 +86,32 @@ a:hover { color: white; }
     \\ ========================================== //
 */
 body { color: white; height: auto; font-family: Georgia, serif;}
-H2, H3 { color: #888; text-align: center; font-family: Helvetica, sans-serif; margin: 0px 0px 5px 0px; font-weight: normal;
+H2, H3 { color: #888; text-align: center; font-family: Helvetica, sans-serif; margin: 0 0 5px 0; font-weight: normal;
      text-shadow: 0px -1px 0px #000; }
 H2 { font-size: 138.5%; }
-H3 { margin: 0px 0px 5px 0px; font-size: 123.1% ;}
+H3 { margin: 0 0 5px 0; font-size: 123.1% ;}
 
 #map_canvas { height: auto; min-height: 600px; position: absolute;
-              bottom:0; left:0; right:0; top:0; }
+              bottom: 0; left: 0; right: 0; top: 0; }
 
 .overlay { background-color: #707070; background-color: rgba(41, 41, 41, 0.75);
            border: 2px solid #eee; border: 2px solid rgba(255, 255, 255, 0.7);
-           -moz-box-shadow: 0px 0px 10px #444;  -webkit-box-shadow: 0px 0px 10px #444; 
-           box-shadow: 0px 0px 10px #444; text-shadow: 1px 1px 1px #000;
+           -moz-box-shadow: 0 0 10px #444;  -webkit-box-shadow: 0 0 10px #444; 
+           box-shadow: 0 0 10px #444; text-shadow: 1px 1px 1px #000;
            -moz-background-clip: border-box; -webkit-background-clip: border-box; background-clip: border-box; }
                 
-#your_score { position: absolute; right: 0px; width: 140px; margin: 10px; padding: 5px; 
+#your_score { position: absolute; right: 0; width: 140px; margin: 10px; padding: 5px; 
               font-size: 153.9%; font-weight: bold; text-align: center;
               -moz-border-radius: 10px; -webkit-border-radius: 10px;
               border-radius: 10px; }
 
-.button { display: inline-block; padding: 2px 5px; margin: 0px 0px 20px 18px; width: 80px; 
+.button { display: inline-block; padding: 2px 5px; margin: 0 0 20px 18px; width: 80px; 
                 font-size: 100%; text-align: center; 
                 background-color: #444; background-color: rgba(0,0,0, 0.2); 
                 border: 2px solid #333; border: 2px solid rgba(0,0,0, 0.3);
                 -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px; 
-                -moz-box-shadow: 0px 0px 2px #ccc; -webkit-box-shadow: 0px 0px 2px #ccc; 
-                box-shadow: 0px 0px 2px #ccc; 
+                -moz-box-shadow: 0 0 2px #ccc; -webkit-box-shadow: 0 0 2px #ccc; 
+                box-shadow: 0 0 2px #ccc; 
               }
 .button:hover { background-color: rgba(0,0,0, 0.3); border: 2px solid rgba(0,0,0, 0.6); }
 .overlay B { display: block; color: #C70000; font-weight: normal; }
@@ -162,7 +162,7 @@ H3 { margin: 0px 0px 5px 0px; font-size: 123.1% ;}
   top: 0;
 }
   																					
-div.blockMsg {
+.blockMsg {
   color: white;
 }
 

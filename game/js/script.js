@@ -25,15 +25,8 @@ var City = function () {
     this.country = "";
     this.hint = "";
     this.sights = [];
-    this.reset = function () {
-        this.name = "";
-        this.dbPediaUrl = "";
-        this.country = "";
-        this.hint = "";
-        this.dbPediaUrl = "";
-        this.sights = [];
-        this.photoCollection = "";
-    };
+    this.playerDistance = 0;
+    this.joker = 0;
 };
 
 var Sight = function () {
@@ -398,7 +391,7 @@ var Question = {
    
     // outputs the collected information to a file, database etc. 
     writeResult: function () {
-        $.post("writeResult.php", { city: Answers.currentCity });
+        $.post("writeResultXML.php", { city: Answers.currentCity });
     }
 };
 
@@ -496,6 +489,7 @@ var Map = {
                 
                 ergebnisArray[2] = Game.calculatePoints(ergebnisArray[0], null);
                 
+                Answers.currentCity.playerDistance = ergebnisArray[0];
                 Question.displayAnswer(ergebnisArray);
                 
             }
@@ -523,6 +517,7 @@ var Eurotrip = {
             event.preventDefault();
             
             if (Game.hasMorePics === false) {
+                Answers.currentCity.joker += 1;
                 Answers.currentCity.images = [];
                 Question.displayQuestion(1);
                 $(this).block({ message: null });
@@ -535,6 +530,7 @@ var Eurotrip = {
             event.preventDefault();
             Question.displayHint();
             if (Game.hasHint === false) {
+                Answers.currentCity.joker += 1;
                 Game.calculatePoints(null, Game.hintPoints);
                 Game.hasHint = true;
             }
