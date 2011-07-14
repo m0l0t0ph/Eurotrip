@@ -88,7 +88,7 @@ a:hover { color: white; }
 body { color: white; height: auto; font-family: Georgia, serif;}
 H2, H3 { color: #888; text-align: center; font-family: Helvetica, sans-serif; margin: 0 0 5px 0; font-weight: normal;
      text-shadow: 0px -1px 0px #000; }
-H2 { font-size: 138.5%; }
+H2 { font-size: 138.5%; margin-top: 5px; }
 H3 { margin: 0 0 5px 0; font-size: 123.1% ;}
 
 #map_canvas { height: auto; min-height: 600px; position: absolute;
@@ -115,7 +115,7 @@ H3 { margin: 0 0 5px 0; font-size: 123.1% ;}
               }
 .button:hover { background-color: rgba(0,0,0, 0.3); border: 2px solid rgba(0,0,0, 0.6); }
 .overlay B { display: block; color: #C70000; font-weight: normal; }
-#navigation { position: absolute; height: 100%; min-height: 600px; padding-top: 5px; width: 250px; border-width: 0 2px 0 0; }
+#navigation { position: absolute; height: 100%; min-height: 600px; width: 250px; border-width: 0 2px 0 0; }
 #hint { display: none; padding: 0px 15px; margin-bottom: 20px; }
 #hintText { font-size: 108%; text-shadow: 1px 1px 1px black; }
 
