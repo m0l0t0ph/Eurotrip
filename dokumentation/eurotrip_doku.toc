@@ -21,7 +21,6 @@
 \contentsline {subsection}{\numberline {5.1}Erkenntnisse}{9}
 \contentsline {subsection}{\numberline {5.2}Vor- und Nachteile von Linked Open Data}{10}
 \contentsline {section}{\numberline {6}Fazit}{12}
-\contentsline {subsection}{\numberline {6.1}Zusammenfassung}{12}
-\contentsline {subsection}{\numberline {6.2}St\IeC {\"a}rken und Schw\IeC {\"a}chen}{12}
-\contentsline {subsection}{\numberline {6.3}Ausblick}{12}
+\contentsline {subsection}{\numberline {6.1}Das Projektergebnis \IeC {\quotedblbase }in a nutshell\IeC {\textquotedblleft }}{12}
+\contentsline {subsection}{\numberline {6.2}Ausblick}{12}
 \contentsline {section}{\numberline {7}Anhang}{I}

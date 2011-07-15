@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2011.6.24)  11 JUL 2011 18:20
+This is pdfTeX, Version 3.1415926-1.40.11 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2011.6.24)  15 JUL 2011 16:44
 entering extended mode
 **L:/Daten/Studium/4_Semester/Seminar*Linked*Open*Data/Eurotrip/dokumentation/e
 urotrip_doku.tex
@@ -316,7 +316,14 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 \rot@mess@toks=\toks19
 )
 ("L:\Daten\Studium\4_Semester\Seminar Linked Open Data\Eurotrip\dokumentation\e
-urotrip_doku.aux")
+urotrip_doku.aux"
+
+LaTeX Warning: Label `pic:Pakete' multiply defined.
+
+
+LaTeX Warning: Label `pic:Pakete' multiply defined.
+
+)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
 LaTeX Font Info:    ... okay on input line 14.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
@@ -385,6 +392,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 92--95
 
  []
 
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 99.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 99.
 
 Underfull \hbox (badness 10000) in paragraph at lines 96--100
 
@@ -401,207 +412,210 @@ Underfull \hbox (badness 10000) in paragraph at lines 96--100
  []
 
 [1]
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 103.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 103.
-
-Underfull \hbox (badness 10000) in paragraph at lines 103--105
+Underfull \hbox (badness 10000) in paragraph at lines 103--106
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 103--105
+Underfull \hbox (badness 10000) in paragraph at lines 103--106
 
  []
 
 
-Overfull \hbox (2.38455pt too wide) in paragraph at lines 103--105
+Overfull \hbox (2.38455pt too wide) in paragraph at lines 103--106
 \OT1/cmr/m/n/10.95 Als An-bie-ter der Soft-wa-re ist ne-ben der Schaf-fung ei-n
 er Ein-nah-mem[]oglichkeit
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 106--108
+Underfull \hbox (badness 10000) in paragraph at lines 107--109
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 106--108
+Underfull \hbox (badness 10000) in paragraph at lines 107--109
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 109--111
+Underfull \hbox (badness 10000) in paragraph at lines 110--112
 
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 112--115
+Underfull \hbox (badness 10000) in paragraph at lines 113--116
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 112--115
+Underfull \hbox (badness 10000) in paragraph at lines 113--116
 
  []
 
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 118--120
+[3] <projektplanung_organigramm_sw.png, id=29, 1236.62pt x 780.9175pt>
+File: projektplanung_organigramm_sw.png Graphic file (type png)
 
+<use projektplanung_organigramm_sw.png>
+Overfull \hbox (7.94958pt too wide) in paragraph at lines 119--125
+\OT1/cmr/m/n/10.95 wel-che M[]oglichkeiten LOD Da-tens[]atze bie-ten. Ein re-ge
+lm[]aiges, w[]ochentliches
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 121--123
+Underfull \hbox (badness 10000) in paragraph at lines 129--131
 
  []
 
+[4 <L:/Daten/Studium/4_Semester/Seminar Linked Open Data/Eurotrip/dokumentation
+/projektplanung_organigramm_sw.png>]
 
-Overfull \hbox (2.59747pt too wide) in paragraph at lines 121--123
-\OT1/cmr/m/n/10.95 Die Un-aus-ge-gli-chen-heit der Pro-jek-t-auf-ga-ben auf-gru
-nd un-ter-schied-li-cher Aus-
+LaTeX Warning: Reference `pic:Konzept' on page 5 undefined on input line 134.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 134--136
+
  []
 
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 126--128
-
- []
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 130.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 138.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 130.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 138.
 
-Overfull \hbox (4.61214pt too wide) in paragraph at lines 132--134
-[]\OT1/cmr/bx/n/10.95 getInfo.php: \OT1/cmr/m/n/10.95 Holt sich den eng-li-sche
-n Ab-stract der []ubergebenen Stadt,
- []
-
-
-Overfull \hbox (0.54387pt too wide) in paragraph at lines 135--136
+Overfull \hbox (0.54387pt too wide) in paragraph at lines 143--144
 []\OT1/cmr/bx/n/10.95 getFlag.php: \OT1/cmr/m/n/10.95 Ei-ne Bei-spie-lim-ple-me
 n-tie-rung f[]ur ei-ne Bo-nus-fra-gen--Me-
  []
 
 [5]
-Underfull \hbox (badness 10000) in paragraph at lines 138--140
+Underfull \hbox (badness 10000) in paragraph at lines 147--149
 
+ []
+
+
+Overfull \hbox (8.2234pt too wide) in paragraph at lines 153--154
+\OT1/cmr/m/n/10.95 ge-tauscht wer-den, dann m[]ussen die-se mit ih-rem DB-pe-di
+a URI []ubergeben
  []
 
 [6]
-Underfull \hbox (badness 10000) in paragraph at lines 150--152
+Underfull \hbox (badness 10000) in paragraph at lines 159--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--157
+Underfull \hbox (badness 10000) in paragraph at lines 163--166
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--157
+Underfull \hbox (badness 10000) in paragraph at lines 163--166
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 154--157
+Underfull \hbox (badness 10000) in paragraph at lines 163--166
 
  []
 
 [7]
-Underfull \hbox (badness 10000) in paragraph at lines 158--160
+Underfull \hbox (badness 10000) in paragraph at lines 167--169
 
  []
 
 [8]
-Overfull \hbox (2.6887pt too wide) in paragraph at lines 163--169
-\OT1/cmr/m/n/10.95 Das wich-tigs-te Er-geb-nis un-se-rer Pro-jekt-ar-beit ist, 
-dass ei-ne Spiel-Anwendung
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 163--169
+Underfull \hbox (badness 10000) in paragraph at lines 172--177
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 163--169
+Underfull \hbox (badness 10000) in paragraph at lines 172--177
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 163--169
+Underfull \hbox (badness 10000) in paragraph at lines 172--177
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 163--169
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 163--169
+Underfull \hbox (badness 10000) in paragraph at lines 172--177
 
  []
 
 [9]
-Underfull \hbox (badness 10000) in paragraph at lines 170--172
+Underfull \hbox (badness 10000) in paragraph at lines 184--186
 
  []
 
 
-Overfull \hbox (3.58604pt too wide) in paragraph at lines 174--175
+Overfull \hbox (3.58604pt too wide) in paragraph at lines 188--189
 []\OT1/cmr/m/n/10.95 Im Ge-gen-satz zu kon-ven-tio-nel-ler In-for-ma-ti-ons-re-
 pr[]asentation erm[]oglicht
  []
 
 
-Overfull \hbox (0.10336pt too wide) in paragraph at lines 175--176
+Overfull \hbox (0.10336pt too wide) in paragraph at lines 189--190
 \OT1/cmr/m/n/10.95 names-St[]adtelinks, DBpedia-Eintr[]agen, Freebase-Informati
 onen zu Se-
  []
 
-[10] [11] [12]
-<projektplanung_organigramm_sw.png, id=59, 1236.62pt x 780.9175pt>
-File: projektplanung_organigramm_sw.png Graphic file (type png)
 
-<use projektplanung_organigramm_sw.png>
-<seminarLOD.png, id=61, 3067.93236pt x 2338.14706pt>
-File: seminarLOD.png Graphic file (type png)
- <use seminarLOD.png>
-Overfull \hbox (17.77534pt too wide) in paragraph at lines 200--201
- [][] 
+Overfull \hbox (8.65038pt too wide) in paragraph at lines 193--194
+\OT1/cmr/m/n/10.95 ten-quel-len wer-den un-ter-schied-li-che For-ma-te und Kon-
+ven-tio-nen bez[]uglich
  []
 
+[10] [11] <vor_nachteile_sw.png, id=60, 787.94376pt x 493.845pt>
+File: vor_nachteile_sw.png Graphic file (type png)
+
+<use vor_nachteile_sw.png> [12 <L:/Daten/Studium/4_Semester/Seminar Linked Open
+ Data/Eurotrip/dokumentation/vor_nachteile_sw.png>]
+<seminarLOD.png, id=65, 2173.76823pt x 1417.05882pt>
+File: seminarLOD.png Graphic file (type png)
+ <use seminarLOD.png>
+Overfull \hbox (38.95764pt too wide) in paragraph at lines 216--219
+ [] 
+ []
+
+
+Overfull \vbox (78.57132pt too high) has occurred while \output is active []
+
+
 [1 <L:/Daten/Studium/4_Semester/Seminar Linked Open Data/Eurotrip/dokumentation
-/projektplanung_organigramm_sw.png>] [2 <L:/Daten/Studium/4_Semester/Seminar Li
-nked Open Data/Eurotrip/dokumentation/seminarLOD.png>]
+/seminarLOD.png (PNG copy)>]
 ("L:\Daten\Studium\4_Semester\Seminar Linked Open Data\Eurotrip\dokumentation\e
-urotrip_doku.aux") ) 
+urotrip_doku.aux")
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 1750 strings out of 494053
- 22089 string characters out of 3148606
- 81238 words of memory out of 3000000
- 5036 multiletter control sequences out of 15000+200000
- 10291 words of font info for 36 fonts, out of 3000000 for 9000
+ 1755 strings out of 494053
+ 22206 string characters out of 3148606
+ 82265 words of memory out of 3000000
+ 5039 multiletter control sequences out of 15000+200000
+ 10599 words of font info for 37 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 25i,9n,24p,1217b,290s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm
-/cmbx10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.
-pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/P
-rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmsl10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsf
-onts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmti10.pfb>
-Output written on eurotrip_doku.pdf (17 pages, 386530 bytes).
+ 25i,9n,24p,1414b,259s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/
+public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
+fonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/c
+mr9.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsl10.pfb>
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Prog
+ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on eurotrip_doku.pdf (16 pages, 427209 bytes).
 PDF statistics:
- 102 PDF objects out of 1000 (max. 8388607)
+ 104 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
